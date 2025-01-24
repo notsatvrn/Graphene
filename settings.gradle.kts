@@ -1,9 +1,10 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
+        mavenLocal()
     }
 }
 
-rootProject.name = "Tentacles"
-include("Tentacles-API", "Tentacles-Server")
+rootProject.name = "Graphene"
+include("Graphene-API", "Graphene-Server")
