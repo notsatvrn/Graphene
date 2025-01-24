@@ -1,8 +1,18 @@
-[Purpur]: https://purpur.pl3x.net
+## Graphene
 
-## Tentacles
+Light and flexible Minecraft 1.17.1 server software based on [Purpur](https://purpur.pl3x.net).
 
-Light and flexible Minecraft 1.17.1 server software based on [Purpur].
+## Downloads
+
+[![Downloads](https://img.shields.io/github/workflow/status/GrapheneMC-dev/Graphene/Build?event=push&label=Downloads&logo=github)](https://github.com/GrapheneMC-dev/Graphene/actions)
+
+Downloads can be obtained from the [Github Actions page](https://github.com/GrapheneMC-dev/Graphene/actions).
+
+## License
+
+[![MIT License](https://img.shields.io/github/license/GrapheneMC-dev/Graphene?&logo=github)](LICENSE)
+
+All patches are licensed under the MIT license, unless otherwise noted in the patch headers.
 
 ## Building and setting up
 

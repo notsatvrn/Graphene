@@ -22,6 +22,20 @@ jobs:
       - name: Configure Git
         run: git config --global user.email "no-reply@github.com" && git config --global user.name "Github Actions"
 
+      - name: Clone paperweight
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+        with:
+          depth: 1
+          branch: "1.2.x"
+          owner: "GrapheneMC-dev"
+          repository: "paperweight"
+
+      - name: Setup paperweight
+        run: |
+          cd paperweight
+          ./gradlew publishToMavenLocal
+          cd ..
+
       - name: Apply patches
         run: ./gradlew applyPatches --stacktrace
 
