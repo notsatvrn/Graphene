@@ -34,7 +34,7 @@ jobs:
           ./gradlew build --stacktrace
           ./gradlew paperclipJar --stacktrace
       - name: Archive Paperclip
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Graphene
-          path: build/libs/Graphene-${{ steps.mcver.outputs.mcver }}-R0.1-SNAPSHOT.jar
+          path: build/libs/Graphene-1.17.1-R0.1-SNAPSHOT.jar
