@@ -1,16 +1,19 @@
+<div align="center">
+
 ## Graphene
 
-Light and flexible Minecraft 1.17.1 server software based on [Purpur](https://purpur.pl3x.net).
+[![MIT License](https://img.shields.io/github/license/GrapheneMC-dev/Graphene?&logo=github)](License)
+[![Github Actions Build](https://img.shields.io/github/actions/workflow/status/GrapheneMC-dev/Graphene/build.yml?branch=ver/1.17.1&event=push&logo=github)](https://github.com/GrapheneMC-dev/Graphene/actions)
+
+Light and flexible Minecraft 1.17.1 server software based on [Purpur](https://purpurmc.org/).
+
+</div>
 
 ## Downloads
-
-[![Downloads](https://img.shields.io/github/actions/workflow/status/GrapheneMC-dev/Graphene/build.yml?branch=ver/1.17.1&event=push&label=Downloads&logo=github)](https://github.com/GrapheneMC-dev/Graphene/actions)
 
 Downloads can be obtained from the [Github Actions page](https://github.com/GrapheneMC-dev/Graphene/actions).
 
 ## License
-
-[![MIT License](https://img.shields.io/github/license/GrapheneMC-dev/Graphene?label=License&logo=github)](LICENSE)
 
 All patches are licensed under the MIT license, unless otherwise noted in the patch headers.
 

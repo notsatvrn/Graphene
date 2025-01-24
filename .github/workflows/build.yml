@@ -1,4 +1,4 @@
-name: Build Tentacles
+name: Build Graphene
 on:
   push:
   pull_request:
