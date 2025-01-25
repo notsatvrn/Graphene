@@ -187,10 +187,10 @@ index 0000000000000000000000000000000000000000..38c13b6a61c5791e0c831c8cfa0ff816
 +
 +}
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-index 898aadf76f93d3d98a4ba74e96832c58ecb6f8d1..00fe4645264618121dfd1e1239fa9cfc3ba37586 100644
+index 2c2cf1f1bce6bf5058bd89dba02f3d5c44d225fc..a5a1003a6dd1ec69148d292d9f28199c90e35927 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-@@ -269,4 +269,62 @@ public class GrapheneConfig {
+@@ -254,4 +254,62 @@ public class GrapheneConfig {
          stopCommandSuccess = getString("commands.stop.success", "<green>The stop has been successfully scheduled!");
      }
  

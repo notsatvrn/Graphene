@@ -5,7 +5,7 @@ Subject: [PATCH] Purpur Backport: Mob head visibility percent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 23d9139c16521abdcf4e46b3757fa3d1217fca5e..2e36a90b569916be36e8b4de158d090a1780db1e 100644
+index ce68bfe33b7fcbbacc135e60c79e1a9c52ebedfc..850b2df87cdc811a0f5c5d15a77a9fcee1d9bfce 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -995,9 +995,17 @@ public abstract class LivingEntity extends Entity {

@@ -1,8 +1,9 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: astei <andrew@steinborn.me>
 Date: Tue, 30 Nov 2021 19:39:21 +0100
-Subject: [PATCH] Paper PR: Optimize VarInts
+Subject: [PATCH] PaperPR: Optimize VarInts
 
+Taken from https://github.com/PaperMC/Paper/pull/6957
 
 diff --git a/src/main/java/net/minecraft/network/FriendlyByteBuf.java b/src/main/java/net/minecraft/network/FriendlyByteBuf.java
 index e3b80334164ba48e83cca0b9a7f3a8ddf05dd598..18e882c2b4f0561ca3b7f1bac6eb2c87016fe992 100644

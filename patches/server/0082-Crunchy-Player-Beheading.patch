@@ -5,7 +5,7 @@ Subject: [PATCH] Crunchy: Player Beheading
 
 
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneWorldConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneWorldConfig.java
-index 6ac23911fb79ae0d30fcd2c156760283410d6d08..233078510af4e9a45a201c622b3c8f631c95d615 100644
+index 4bed9f575ca351c569fe90a1f6695b7728e27f17..7c90c212b56c5912118eb2991afc792f9cd85733 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneWorldConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneWorldConfig.java
 @@ -1,9 +1,19 @@
@@ -16,22 +16,23 @@ index 6ac23911fb79ae0d30fcd2c156760283410d6d08..233078510af4e9a45a201c622b3c8f63
  import net.minecraft.server.level.ServerLevel;
 +import net.minecraft.world.item.Item;
 +import net.minecraft.world.item.Items;
- import org.apache.commons.lang.BooleanUtils;
- import org.simpleyaml.configuration.ConfigurationSection;
 +import org.bukkit.craftbukkit.inventory.CraftItemStack;
 +import org.bukkit.entity.Player;
 +import org.bukkit.inventory.ItemStack;
 +import org.jetbrains.annotations.Nullable;
+ import org.apache.commons.lang.BooleanUtils;
+ import org.simpleyaml.configuration.ConfigurationSection;
  
 +import java.util.ArrayList;
 +import java.util.Arrays;
  import java.util.List;
  import java.util.Map;
  import java.util.function.Predicate;
-@@ -77,6 +87,30 @@ public class GrapheneWorldConfig {
-         return value.isEmpty() ? fallback : value;
+@@ -104,4 +114,28 @@ public class GrapheneWorldConfig {
+         this.chickenAvoidFoxSlow = getDouble("mobs.chicken.avoid-fox.slow-speed", 1.0D);
+         this.chickenAvoidFoxFast = getDouble("mobs.chicken.avoid-fox.fast-speed", 1.5D);
      }
- 
++
 +    // Beheading Settings
 +    public boolean beheadingEnabled;
 +    public double beheadingChance;
@@ -55,10 +56,7 @@ index 6ac23911fb79ae0d30fcd2c156760283410d6d08..233078510af4e9a45a201c622b3c8f63
 +    public boolean isValidBeheadingItem(@Nullable Player player) {
 +        return player != null && beheadingItems.contains(CraftItemStack.asNMSCopy(player.getInventory().getItemInMainHand()).getItem());
 +    }
-+
-     // Chicken Settings
-     public boolean chickenAvoidFox;
-     public float chickenAvoidFoxDistance;
+ }
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 index 5a0cbaf94796a979c84d9426d3412955298d4c7c..8d375e132e76e52aed68fd2e9c335c06e13a6191 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java

@@ -5,10 +5,10 @@ Subject: [PATCH] JettPack: remove 'sync-chunk-writes' in server.properties
 
 
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index ac99a095391409a7aa89987bc5ec40bc73e56e63..5d7cb4dc832d3885285d48b9c84b3176d53374d3 100644
+index 31db7a14d67a2e4a24f590ee29a79904fb6ef637..49bf8b62b9e49f0d6de9845228bbb1677d1636ee 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -475,7 +475,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -476,7 +476,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          BufferedWriter bufferedwriter = Files.newBufferedWriter(file);
  
          try {

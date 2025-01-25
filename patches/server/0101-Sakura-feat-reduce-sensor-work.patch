@@ -10,7 +10,7 @@ Original license: GPLv3
 Original project: https://github.com/Bloom-host/Petal
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 2e36a90b569916be36e8b4de158d090a1780db1e..74f92c3fa2e3b2e99d8ae560346e943e6194ff37 100644
+index 850b2df87cdc811a0f5c5d15a77a9fcee1d9bfce..e201dac869e603378f7f3cd0459c872accf7f99a 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -992,20 +992,22 @@ public abstract class LivingEntity extends Entity {

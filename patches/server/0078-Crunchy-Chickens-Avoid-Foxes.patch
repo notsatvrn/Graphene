@@ -5,12 +5,12 @@ Subject: [PATCH] Crunchy: Chickens Avoid Foxes
 
 
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneWorldConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneWorldConfig.java
-index 7d8a66e962a6c607482148258a5e4e4bd5560228..6ac23911fb79ae0d30fcd2c156760283410d6d08 100644
+index f97f42ac0197be21b10d6e6288b31dc88211eacf..4bed9f575ca351c569fe90a1f6695b7728e27f17 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneWorldConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneWorldConfig.java
-@@ -76,4 +76,17 @@ public class GrapheneWorldConfig {
-         final Map<String, Object> value = GrapheneConfig.getMap("world-settings." + worldName + "." + path, null);
-         return value.isEmpty() ? fallback : value;
+@@ -91,4 +91,17 @@ public class GrapheneWorldConfig {
+             log("Farm detection radius: " + pigmenFarmsRadius + ", count: " + pigmenFarmsCount);
+         }
      }
 +
 +    // Chicken Settings

@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phoenix616 <max@themoep.de>
+Date: Thu, 28 Jan 2021 22:47:20 +0100
+Subject: [PATCH] Origami: Disable online-mode if bungeecord or velocity
+
+Original code by Phoenix616, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/Minebench/Origami/
+
+Updated to 1.17 by: notsatvrn <satvrn@gmx.com>
+
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index ac99a095391409a7aa89987bc5ec40bc73e56e63..31db7a14d67a2e4a24f590ee29a79904fb6ef637 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -248,6 +248,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         }
+         io.graphenemc.graphene.GrapheneConfig.registerCommands();
+         // Graphene end
++        if (org.spigotmc.SpigotConfig.bungee || com.destroystokyo.paper.PaperConfig.velocitySupport) this.setUsesAuthentication(false); // Origami - Automatically disable online-mode if bungeecord/velocity are enabled
+         com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // load version history now
+         io.papermc.paper.util.ObfHelper.INSTANCE.getClass(); // load mappings for stacktrace deobf and etc.
+         io.papermc.paper.brigadier.PaperBrigadierProviderImpl.INSTANCE.getClass(); // init PaperBrigadierProvider

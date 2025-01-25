@@ -1,0 +1,89 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: notsatvrn <satvrn@gmx.com>
+Date: Sat, 25 Jan 2025 15:26:45 -0800
+Subject: [PATCH] Lithium: ai.raid
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/raid/Raid.java b/src/main/java/net/minecraft/world/entity/raid/Raid.java
+index a79ba23ecf887ecbb6e095140f019ebb6fd0a6f7..fa39069e5e2aabbf05c7718485913b6da1616880 100644
+--- a/src/main/java/net/minecraft/world/entity/raid/Raid.java
++++ b/src/main/java/net/minecraft/world/entity/raid/Raid.java
+@@ -107,6 +107,7 @@ public class Raid {
+     private Raid.RaidStatus status;
+     private int celebrationTicks;
+     private Optional<BlockPos> waveSpawnPos;
++    private boolean isBarDirty; // Lithium - ai.raid
+ 
+     public Raid(int id, ServerLevel world, BlockPos pos) {
+         this.raidEvent = new ServerBossEvent(Raid.RAID_NAME_COMPONENT, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_10);
+@@ -270,6 +271,13 @@ public class Raid {
+     }
+ 
+     public void tick() {
++        // Lithium start - ai.raid
++        if (this.isBarDirty) {
++            this.raidEvent.setProgress(Mth.clamp(this.getHealthOfLivingRaiders() / this.totalHealth, 0.0F, 1.0F));
++            this.isBarDirty = false;
++        }
++        // Lithium end
++
+         if (!this.isStopped()) {
+             if (this.status == Raid.RaidStatus.ONGOING) {
+                 boolean flag = this.active;
+@@ -624,8 +632,12 @@ public class Raid {
+ 
+     }
+ 
++    /**
++     * @reason Delay re-calculating and sending progress bar updates until the next tick to avoid excessive updates
++     * @author JellySquid
++     */
+     public void updateBossbar() {
+-        this.raidEvent.setProgress(Mth.clamp(this.getHealthOfLivingRaiders() / this.totalHealth, 0.0F, 1.0F));
++        this.isBarDirty = true; // Lithium - ai.raid
+     }
+ 
+     public float getHealthOfLivingRaiders() {
+diff --git a/src/main/java/net/minecraft/world/entity/raid/Raider.java b/src/main/java/net/minecraft/world/entity/raid/Raider.java
+index 4efc0870fadc291260491b9cc4e048916633185f..d2beaef87e3b989fa5bcc08b53130f849e5ae715 100644
+--- a/src/main/java/net/minecraft/world/entity/raid/Raider.java
++++ b/src/main/java/net/minecraft/world/entity/raid/Raider.java
+@@ -47,9 +47,10 @@ import net.minecraft.world.phys.Vec3;
+ 
+ public abstract class Raider extends PatrollingMonster {
+ 
++    private static final ItemStack CACHED_OMINOUS_BANNER = Raid.getLeaderBannerInstance(); // Lithium - ai.raid
+     protected static final EntityDataAccessor<Boolean> IS_CELEBRATING = SynchedEntityData.defineId(Raider.class, EntityDataSerializers.BOOLEAN);
+     static final Predicate<ItemEntity> ALLOWED_ITEMS = (entityitem) -> {
+-        return !entityitem.hasPickUpDelay() && entityitem.isAlive() && ItemStack.matches(entityitem.getItem(), Raid.getLeaderBannerInstance());
++        return !entityitem.hasPickUpDelay() && entityitem.isAlive() && ItemStack.matches(entityitem.getItem(), CACHED_OMINOUS_BANNER); // Lithium - ai.raid
+     };
+     @Nullable
+     protected Raid raid;
+@@ -151,7 +152,7 @@ public abstract class Raider extends PatrollingMonster {
+                     }
+                 }
+ 
+-                if (!itemstack.isEmpty() && ItemStack.matches(itemstack, Raid.getLeaderBannerInstance()) && entityhuman != null) {
++                if (!itemstack.isEmpty() && ItemStack.matches(itemstack, CACHED_OMINOUS_BANNER) && entityhuman != null) { // Lithium - ai.raid
+                     MobEffectInstance mobeffect = entityhuman.getEffect(MobEffects.BAD_OMEN);
+                     byte b0 = 1;
+                     int i;
+@@ -246,7 +247,7 @@ public abstract class Raider extends PatrollingMonster {
+         ItemStack itemstack = item.getItem();
+         boolean flag = this.hasActiveRaid() && this.getCurrentRaid().getLeader(this.getWave()) != null;
+ 
+-        if (this.hasActiveRaid() && !flag && ItemStack.matches(itemstack, Raid.getLeaderBannerInstance())) {
++        if (this.hasActiveRaid() && !flag && ItemStack.matches(itemstack, CACHED_OMINOUS_BANNER)) { // Lithium - ai.raid
+             EquipmentSlot enumitemslot = EquipmentSlot.HEAD;
+             ItemStack itemstack1 = this.getItemBySlot(enumitemslot);
+             double d0 = (double) this.getEquipmentDropChance(enumitemslot);
+@@ -317,7 +318,7 @@ public abstract class Raider extends PatrollingMonster {
+             if ((!this.mob.level.purpurConfig.pillagerBypassMobGriefing && !this.mob.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) || !this.mob.canPickUpLoot()) return false; // Paper - respect game and entity rules for picking up items // Purpur
+             Raid raid = this.mob.getCurrentRaid();
+ 
+-            if (this.mob.hasActiveRaid() && !this.mob.getCurrentRaid().isOver() && this.mob.canBeLeader() && !ItemStack.matches(this.mob.getItemBySlot(EquipmentSlot.HEAD), Raid.getLeaderBannerInstance())) {
++            if (this.mob.hasActiveRaid() && !this.mob.getCurrentRaid().isOver() && this.mob.canBeLeader() && !ItemStack.matches(this.mob.getItemBySlot(EquipmentSlot.HEAD), CACHED_OMINOUS_BANNER)) { // Lithium - ai.raid
+                 Raider entityraider = raid.getLeader(this.mob.getWave());
+ 
+                 if (entityraider == null || !entityraider.isAlive()) {
