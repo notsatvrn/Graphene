@@ -9,11 +9,33 @@ Light and flexible Minecraft 1.17.1 server software based on [Purpur](https://pu
 
 </div>
 
-## ⚠︎ Here be dragons! ⚠︎
+## ⚠️ Here be dragons! ⚠️
 
 Graphene is **_pre-production_** software. Bugs, performance issues, and crashes **_can and will_** occur. In using this software, you assume all responsibility for any damage that occurs. If you encounter an issue, please check [here](https://github.com/GrapheneMC-dev/Graphene/issues) to see if we're already tracking it, and if not, file a report yourself. We'll get on it as soon as we can.
 
-### TL;DR: Graphene is not ready for servers you care about. It will break.
+#### TL;DR: Graphene is not ready for use on servers you care about. *It will break.*
+
+## Credits
+
+Graphene adds patches to Purpur from the following projects:
+
+- [Sugarcane](https://github.com/SugarcaneMC/Sugarcane)
+- [Origami](https://github.com/Minebench/Origami)
+- [Mirai](https://github.com/etil2jz/Mirai)
+- [Patina](https://github.com/PatinaMC/Patina)
+- [JettPack](https://gitlab.com/Titaniumtown/JettPack/-/tree/main)
+- [Akarin](https://github.com/Akarin-project/Akarin)
+- [Lithium](https://github.com/CaffeineMC/lithium-fabric)
+- [Pufferfish](https://github.com/pufferfish-gg/Pufferfish)
+- [Crunchy (repo taken down)](https://github.com/MrFishCakes/Crunchy)
+- [Utopia](https://github.com/bortexel/utopia)
+- [Slice](https://github.com/Cryptite/Slice)
+- [KTP](https://github.com/lynxplay/ktp)
+- [Nyper (repo taken down)](https://github.com/NyCodeGHG/Nyper)
+- [Nabulus](https://github.com/FroobWorld/Nabulus)
+- [VMP](https://github.com/RelativityMC/VMP-fabric)
+- [P4per (patches edited and squashed)](https://github.com/acrylic-style/P4per)
+- [Leaf (repo taken down, patches edited and squashed)](https://github.com/anhcraft/Leaf)
 
 ## Downloads
 
