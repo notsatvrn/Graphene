@@ -1,0 +1,90 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: satvrn <pastawho@gmail.com>
+Date: Thu, 9 Dec 2021 00:34:15 +0000
+Subject: [PATCH] Graphene: Misc cleanup
+
+
+diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
+index 6a00ee7f69bf44c5a9a329df26ac5640b368283b..3daf46a5087dc5743c4922b0cc125822c09861ce 100644
+--- a/src/main/java/net/minecraft/server/Main.java
++++ b/src/main/java/net/minecraft/server/Main.java
+@@ -108,14 +108,10 @@ public class Main {
+             org.bukkit.configuration.file.YamlConfiguration paperConfiguration = loadConfigFile((File) optionset.valueOf("paper-settings"));
+             // Paper end
+ 
++            /* // Graphene
+             Path path1 = Paths.get("eula.txt");
+             Eula eula = new Eula(path1);
+ 
+-            if (optionset.has("initSettings")) { // CraftBukkit
+-                Main.LOGGER.info("Initialized '{}' and '{}'", path.toAbsolutePath(), path1.toAbsolutePath());
+-                return;
+-            }
+-
+             // Spigot Start
+             boolean eulaAgreed = Boolean.getBoolean( "com.mojang.eula.agree" );
+             if ( eulaAgreed )
+@@ -129,6 +125,14 @@ public class Main {
+                 Main.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
+                 return;
+             }
++            */
++
++            boolean eulaAgreed = true;
++
++            if (optionset.has("initSettings")) { // CraftBukkit
++                Main.LOGGER.info("Initialized '{}'", path.toAbsolutePath());
++                return;
++            }
+ 
+             org.spigotmc.SpigotConfig.disabledAdvancements = spigotConfiguration.getStringList("advancements.disabled"); // Paper - fix SPIGOT-5885, must be set early in init
+             // Paper start - fix SPIGOT-5824
+diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
+index 9d6b009c1374f38d5fbc37c1d1e775edd65870e8..4916df946b59e6576b53a2e312a6e9dcd5830e40 100644
+--- a/src/main/java/org/bukkit/craftbukkit/Main.java
++++ b/src/main/java/org/bukkit/craftbukkit/Main.java
+@@ -285,7 +285,7 @@ public class Main {
+                     if (buildDate.before(deadline.getTime())) {
+                         // Paper start - This is some stupid bullshit
+                         System.err.println("*** Warning, you've not updated in a while! ***");
+-                        System.err.println("*** Please download a new build as per instructions from https://papermc.io/downloads ***"); // Paper
++                        System.err.println("*** Please download a new build from https://github.com/GrapheneMC-dev/Graphene/actions ***"); // Paper // Graphene
+                         //System.err.println("*** Server will start in 20 seconds ***");
+                         //Thread.sleep(TimeUnit.SECONDS.toMillis(20));
+                         // Paper End
+diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
+index 4217d52a46f76b9638d5a0f3864012e28aa264be..d9eb912a7483eee3d61c7aa2804a4502529100ea 100644
+--- a/src/main/java/org/spigotmc/SpigotConfig.java
++++ b/src/main/java/org/spigotmc/SpigotConfig.java
+@@ -248,7 +248,7 @@ public class SpigotConfig
+     {
+         int count = SpigotConfig.getInt( "settings.netty-threads", 4 );
+         System.setProperty( "io.netty.eventLoopThreads", Integer.toString( count ) );
+-        Bukkit.getLogger().log( Level.INFO, "Using {0} threads for Netty based IO", count );
++        // Bukkit.getLogger().log( Level.INFO, "Using {0} threads for Netty based IO", count ); // Graphene
+     }
+ 
+     public static boolean disableStatSaving;
+@@ -292,7 +292,7 @@ public class SpigotConfig
+     private static void playerSample()
+     {
+         SpigotConfig.playerSample = Math.max( SpigotConfig.getInt( "settings.sample-count", 12 ), 0 ); // Paper - Avoid negative counts
+-        Bukkit.getLogger().log( Level.INFO, "Server Ping Player Sample Count: {0}", playerSample ); // Paper - Use logger
++        // Bukkit.getLogger().log( Level.INFO, "Server Ping Player Sample Count: {0}", playerSample ); // Paper - Use logger // Graphene
+     }
+ 
+     public static int playerShuffle;
+@@ -382,10 +382,13 @@ public class SpigotConfig
+         if ( LogManager.getRootLogger().isTraceEnabled() )
+         {
+             Bukkit.getLogger().info( "Debug logging is enabled" );
++        /* // Graphene - remove it all
+         } else
+         {
+             // Bukkit.getLogger().info( "Debug logging is disabled" ); // Paper - Don't log if debug logging isn't enabled.
+         }
++        */
++        }
+     }
+ 
+     public static boolean disableAdvancementSaving;

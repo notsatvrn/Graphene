@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Simon Gardling <titaniumtown@gmail.com>
+Date: Tue, 19 Oct 2021 11:14:51 -0400
+Subject: [PATCH] JettPack: configurable logging of player login location
+
+
+diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+index ce459d267c996ea3ac920d9b9ac2e5000a18bdc4..c852ab5ca7481e63651049344adfb384f6d72770 100644
+--- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
++++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+@@ -222,4 +222,9 @@ public class GrapheneConfig {
+         }
+     }
+ 
++    public static boolean logPlayerLoginLoc = true;
++    private static void generalJettPack() {
++        logPlayerLoginLoc = getBoolean("settings.log-player-login-location", logPlayerLoginLoc);
++    }
++
+ }
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index d2f2ddea8bcda5e85c20312fce80d922810d1875..4b071467161139eebca1b9d47390c595de709bdd 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -485,7 +485,13 @@ public abstract class PlayerList {
+         // Paper end
+         net.pl3x.purpur.task.BossBarTask.addToAll(player); // Purpur
+         // CraftBukkit - Moved from above, added world
+-        PlayerList.LOGGER.info("{}[{}] logged in with entity id {} at ([{}]{}, {}, {})", player.getName().getString(), s1, player.getId(), worldserver1.serverLevelData.getLevelName(), player.getX(), player.getY(), player.getZ());
++        // JettPack start -  configurable logging of player login location
++        if (io.graphenemc.graphene.GrapheneConfig.logPlayerLoginLoc) {
++            PlayerList.LOGGER.info("{}[{}] logged in with entity id {} at ([{}]{}, {}, {})", player.getName().getString(), s1, player.getId(), worldserver1.serverLevelData.getLevelName(), player.getX(), player.getY(), player.getZ());
++        } else {
++            PlayerList.LOGGER.info("{}[{}] logged in with entity id {}", player.getName().getString(), s1, player.getId());
++        }
++        // JettPack end
+     }
+ 
+     public void updateEntireScoreboard(ServerScoreboard scoreboard, ServerPlayer player) {

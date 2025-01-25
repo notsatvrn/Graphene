@@ -1,0 +1,190 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: MrFishCakes <finlayoxby@outlook.com>
+Date: Wed, 22 Sep 2021 21:49:50 +0100
+Subject: [PATCH] Crunchy: Enhanced Stop Command
+
+
+diff --git a/src/main/java/dev/mrfishcakes/crunchy/commands/StopCommand.java b/src/main/java/dev/mrfishcakes/crunchy/commands/StopCommand.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..7241d56b3576685e71ba8d65fcee5cb38b5d6a5a
+--- /dev/null
++++ b/src/main/java/dev/mrfishcakes/crunchy/commands/StopCommand.java
+@@ -0,0 +1,132 @@
++package dev.mrfishcakes.crunchy.commands;
++
++import dev.mrfishcakes.crunchy.CrunchyUtil;
++import io.graphenemc.graphene.GrapheneConfig;
++import net.kyori.adventure.text.minimessage.MiniMessage;
++import org.bukkit.Bukkit;
++import org.bukkit.ChatColor;
++import org.bukkit.command.Command;
++import org.bukkit.command.CommandSender;
++import org.jetbrains.annotations.NotNull;
++
++import javax.swing.Timer;
++import java.util.*;
++import java.util.concurrent.TimeUnit;
++import java.util.stream.Collectors;
++import java.util.stream.Stream;
++
++/**
++ * Class to manage the <i>/stop</i> command
++ *
++ * @author MrFishCakes
++ */
++public class StopCommand extends Command {
++
++    private static final Map<String, TimeUnit> VALID_UNITS = new HashMap<>() {{
++        put("sec", TimeUnit.SECONDS);
++        put("secs", TimeUnit.SECONDS);
++        put("seconds", TimeUnit.SECONDS);
++        put("min", TimeUnit.MINUTES);
++        put("mins", TimeUnit.MINUTES);
++        put("minutes", TimeUnit.MINUTES);
++        put("hr", TimeUnit.HOURS);
++        put("hrs", TimeUnit.HOURS);
++        put("hours", TimeUnit.HOURS);
++    }};
++
++    private static Timer stopTimer;
++
++    private final MiniMessage message;
++
++    public StopCommand() {
++        super("stop");
++        this.description = "Enhanced stop command";
++        this.usageMessage = "/stop [time | cancel] [unit]";
++        this.setPermission("bukkit.command.stop");
++        this.message = MiniMessage.get();
++    }
++
++    @Override
++    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
++        if (!testPermission(sender)) return true;
++
++        if (args.length == 1 || args.length == 2) {
++            if (args[0].equalsIgnoreCase("cancel")) {
++                if (stopTimer == null) {
++                    CrunchyUtil.sendMessage(message, sender, GrapheneConfig.stopCommandNotScheduled);
++                    return true;
++                }
++
++                try {
++                    stopTimer.stop();
++                } catch (Exception ex) { // Just in case
++                    CrunchyUtil.sendMessage(message, sender, GrapheneConfig.stopCommandCancelFail);
++                    return true;
++                }
++
++                CrunchyUtil.sendMessage(message, sender, GrapheneConfig.stopCommandCancelled);
++                stopTimer = null;
++                return true;
++            }
++
++            if (stopTimer != null) {
++                CrunchyUtil.sendMessage(message, sender, GrapheneConfig.stopCommandAlreadyScheduled);
++                return true;
++            }
++
++            int time;
++            TimeUnit unit = TimeUnit.SECONDS;
++
++            try {
++                time = Integer.parseInt(args[0]);
++            } catch (NumberFormatException ex) {
++                return sendUsageMessage(sender);
++            }
++
++            if (time < 1) return sendUsageMessage(sender);
++
++            if (args.length == 2) {
++                unit = VALID_UNITS.get(args[1].toLowerCase());
++
++                if (unit == null) unit = TimeUnit.SECONDS;
++            }
++
++            stopTimer = new Timer((int) unit.toMillis(time), e -> Bukkit.shutdown());
++
++            stopTimer.setRepeats(false);
++            stopTimer.start();
++
++            CrunchyUtil.sendMessage(message, sender, GrapheneConfig.stopCommandSuccess);
++            return true;
++        } else if (args.length == 0) {
++            Bukkit.shutdown();
++            return true;
++        } else {
++            return sendUsageMessage(sender);
++        }
++    }
++
++    @Override
++    @NotNull
++    public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
++        if (!testPermissionSilent(sender)) return Collections.emptyList();
++
++        if (args.length == 1) {
++            if (stopTimer == null) return Collections.singletonList("[time]");
++
++            return Stream.of("cancel").filter(arg -> arg.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
++        }
++
++        if (args.length == 2) {
++            return VALID_UNITS.keySet().stream().filter(arg -> arg.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
++        }
++
++        return Collections.emptyList();
++    }
++
++    private boolean sendUsageMessage(CommandSender sender) {
++        CrunchyUtil.sendMessage(sender, ChatColor.RED + "Usage: " + usageMessage);
++        return true;
++    }
++
++}
+diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+index 26ebbdb97b4dd8b92ee66c56970663541e2dd305..2c2cf1f1bce6bf5058bd89dba02f3d5c44d225fc 100644
+--- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
++++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+@@ -13,6 +13,7 @@ import org.simpleyaml.exceptions.InvalidConfigurationException;
+ 
+ import io.graphenemc.graphene.command.GrapheneCommand;
+ import org.sugarcanemc.sugarcane.command.NSPTCommand;
++import dev.mrfishcakes.crunchy.commands.StopCommand;
+ 
+ import java.io.File;
+ import java.io.IOException;
+@@ -77,6 +78,11 @@ public class GrapheneConfig {
+         commands.put("npst", new NSPTCommand("nspt"));
+ 
+         readConfig(GrapheneConfig.class, null);
++
++        if (stopCommandEnabled) {
++            MinecraftServer.getServer().vanillaCommandDispatcher.getDispatcher().getRoot().removeCommand("stop"); // This unregisters minecraft:stop
++            commands.put("stop", new StopCommand());
++        }
+     }
+ 
+     protected static void log(String s) {
+@@ -231,4 +237,21 @@ public class GrapheneConfig {
+         fishingRodLength = getDouble("settings.fishing-rod-length", fishingRodLength);
+     }
+ 
++    // Stop Command
++    public static boolean stopCommandEnabled;
++    public static String stopCommandNotScheduled;
++    public static String stopCommandCancelFail;
++    public static String stopCommandCancelled;
++    public static String stopCommandAlreadyScheduled;
++    public static String stopCommandSuccess;
++
++    private static void stopCommandSettings() {
++        stopCommandEnabled = getBoolean("commands.stop.enabled", false);
++        stopCommandNotScheduled = getString("commands.stop.not-scheduled", "<red>There is no server stop scheduled, use ''/stop [time] [unit]''");
++        stopCommandCancelFail = getString("commands.stop.cancel-fail", "<red>An error occurred when trying to deactivate the timer. The stop MIGHT still occur!");
++        stopCommandCancelled = getString("commands.stop.cancelled", "<green>The server stop has been cancelled!");
++        stopCommandAlreadyScheduled = getString("commands.stop.already-scheduled", "<red>A server stop is already scheduled, to cancel it use ''/stop cancel''");
++        stopCommandSuccess = getString("commands.stop.success", "<green>The stop has been successfully scheduled!");
++    }
++
+ }

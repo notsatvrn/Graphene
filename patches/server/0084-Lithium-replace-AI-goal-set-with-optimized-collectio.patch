@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Simon Gardling <titaniumtown@gmail.com>
+Date: Sun, 12 Dec 2021 16:41:06 -0500
+Subject: [PATCH] Lithium: replace AI goal set with optimized collection
+
+Original code licensed under GNU Lesser General Public License v3.0 and created for the lithium project: https://github.com/CaffeineMC/lithium-fabric/
+
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
+index 441e2edd8357c4f11093b4dee2192780ac3f3579..d3c8a961ee27c716f2128a9145a7e9ff28b2ccd6 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
+@@ -11,6 +11,7 @@ import java.util.stream.Stream;
+ import net.minecraft.util.profiling.ProfilerFiller;
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
++import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet; // JettPack
+ 
+ public class GoalSelector {
+     private static final Logger LOGGER = LogManager.getLogger();
+@@ -26,7 +27,7 @@ public class GoalSelector {
+         }
+     };
+     private final Map<Goal.Flag, WrappedGoal> lockedFlags = new EnumMap<>(Goal.Flag.class);
+-    public final Set<WrappedGoal> availableGoals = Sets.newLinkedHashSet();
++    public final Set<WrappedGoal> availableGoals = new ObjectLinkedOpenHashSet<>(); // JettPack - lithium: replace AI goal set with optimized collection
+     private final Supplier<ProfilerFiller> profiler;
+     private final EnumSet<Goal.Flag> disabledFlags = EnumSet.noneOf(Goal.Flag.class); // Paper unused, but dummy to prevent plugins from crashing as hard. Theyll need to support paper in a special case if this is super important, but really doesn't seem like it would be.
+     private final com.destroystokyo.paper.util.set.OptimizedSmallEnumSet<net.minecraft.world.entity.ai.goal.Goal.Flag> goalTypes = new com.destroystokyo.paper.util.set.OptimizedSmallEnumSet<>(Goal.Flag.class); // Paper - remove streams from pathfindergoalselector

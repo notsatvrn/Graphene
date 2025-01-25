@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Thu, 6 Nov 2014 21:36:14 -0500
+Subject: [PATCH] EMC: Mark Withers as Persistent
+
+We don't want them despawning due to player range
+
+diff --git a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
+index 6b75aaca3f22cdf3b6b51db04d6d2ed642fc0e73..fe7e99d8dcc5d4d268cdeda69da0550fbd45a89b 100644
+--- a/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
++++ b/src/main/java/net/minecraft/world/entity/boss/wither/WitherBoss.java
+@@ -727,6 +727,7 @@ public class WitherBoss extends Monster implements PowerableMob, RangedAttackMob
+         return this.getHealth() <= this.getMaxHealth() / 2.0F;
+     }
+ 
++    @Override public boolean removeWhenFarAway(double distanceSquared) { return false; } // EMC
+     @Override
+     public MobType getMobType() {
+         return MobType.UNDEAD;

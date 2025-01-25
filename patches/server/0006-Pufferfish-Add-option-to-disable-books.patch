@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kevin Raneri <kevin.raneri@gmail.com>
+Date: Tue, 9 Nov 2021 14:21:50 -0500
+Subject: [PATCH] Pufferfish: Add option to disable books
+
+Books are commonly the target of duping-related exploits. If you
+anticipate that your server will be an early target of duping attacks in
+the event that new exploits are found, you may want to consider removing
+the ability for non-privileged players to edit books. This patch allows
+you to easily disable books, should you want to preemptively remove this
+functionality before additional exploits are found.
+
+diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+index 8a93feacc0ca2ccc8568f6a8a1ad75f521d4ce33..62a68052e6e1e81ccce0234484da4294ff88838b 100644
+--- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
++++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+@@ -193,4 +193,13 @@ public class GrapheneConfig {
+         return builder.build();
+     }
+ 
++    public static boolean enableBooks;
++    private static void books() {
++        enableBooks = getBoolean("enable-books", true,
++            "Whether or not books should be writeable.",
++            "Servers that anticipate being a target for duping may want to consider",
++            "disabling this option.",
++            "This can be overridden per-player with the permission graphene.usebooks");
++    }
++
+ }
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index e50eb7c89c3b7b523950d3fe02a433a8e8b57a6f..b3e3d5e4165d50b758446a6f225017facb065d0a 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -1134,6 +1134,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+ 
+     @Override
+     public void handleEditBook(ServerboundEditBookPacket packet) {
++        if (!io.graphenemc.graphene.GrapheneConfig.enableBooks && !this.player.getBukkitEntity().hasPermission("graphene.usebooks")) return; // Pufferfish
+         // Paper start
+         if (!this.cserver.isPrimaryThread()) {
+             List<String> pageList = packet.getPages();

@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Cryptite <cryptite@gmail.com>
+Date: Tue, 5 Oct 2021 09:05:10 -0500
+Subject: [PATCH] Slice: Allow access to LightEngine
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
+index 56271f23fc8fbaa4eccc80fa61e4901149176189..c54a4383826fb0c7f1a0b66fb82a5c2405ba6b10 100644
+--- a/src/main/java/net/minecraft/server/level/ChunkMap.java
++++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
+@@ -702,7 +702,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+         return Math.max(Math.abs(k), Math.abs(l));
+     }
+ 
+-    protected ThreadedLevelLightEngine getLightEngine() {
++    public ThreadedLevelLightEngine getLightEngine() { // Slice (public)
+         return this.lightEngine;
+     }
+ 

@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Simon Gardling <titaniumtown@gmail.com>
+Date: Mon, 13 Dec 2021 11:28:08 -0500
+Subject: [PATCH] JettPack: skip event if no listeners
+
+
+diff --git a/src/main/java/org/bukkit/plugin/SimplePluginManager.java b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
+index 5463b8beafeb40d1f9db900f7467aabd77418cd6..f45132144ca45c3e0862341371e997cd617ead3b 100644
+--- a/src/main/java/org/bukkit/plugin/SimplePluginManager.java
++++ b/src/main/java/org/bukkit/plugin/SimplePluginManager.java
+@@ -613,6 +613,14 @@ public final class SimplePluginManager implements PluginManager {
+      */
+     @Override
+     public void callEvent(@NotNull Event event) {
++        // JettPack start
++        HandlerList handlers = event.getHandlers();
++        RegisteredListener[] listeners = handlers.getRegisteredListeners();
++        if (listeners.length == 0) {
++            return;
++        }
++        // JettPack end
++
+         // Paper - replace callEvent by merging to below method
+         // KTP start - optimize spigot event bus
+         final boolean isAsync = event.isAsynchronous();
+@@ -624,8 +632,8 @@ public final class SimplePluginManager implements PluginManager {
+         }
+         // KTP end - optimize spigot event bus
+ 
+-        HandlerList handlers = event.getHandlers();
+-        RegisteredListener[] listeners = handlers.getRegisteredListeners();
++        //HandlerList handlers = event.getHandlers();
++        //RegisteredListener[] listeners = handlers.getRegisteredListeners();
+ 
+         for (RegisteredListener registration : listeners) {
+             if (!registration.getPlugin().isEnabled()) {

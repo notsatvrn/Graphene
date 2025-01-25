@@ -1,0 +1,52 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Simon Gardling <titaniumtown@gmail.com>
+Date: Wed, 10 Nov 2021 20:18:43 -0500
+Subject: [PATCH] JettPack: configurable fishing rod length
+
+
+diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+index c852ab5ca7481e63651049344adfb384f6d72770..87365ac92c631e926607f57ae9379cca2d951ccc 100644
+--- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
++++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+@@ -223,8 +223,10 @@ public class GrapheneConfig {
+     }
+ 
+     public static boolean logPlayerLoginLoc = true;
++    public static double fishingRodLength = 1024.0D;
+     private static void generalJettPack() {
+         logPlayerLoginLoc = getBoolean("settings.log-player-login-location", logPlayerLoginLoc);
++        fishingRodLength = getDouble("settings.fishing-rod-length", fishingRodLength);
+     }
+ 
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
+index dc7968c3bcf72af22fffbc85b058ac5820f06453..72926238f195e15dd0b923cfdbcaa865e2e94c8b 100644
+--- a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
++++ b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
+@@ -144,7 +144,7 @@ public class FishingHook extends Projectile {
+ 
+     @Override
+     public boolean shouldRenderAtSqrDistance(double distance) {
+-        double d1 = 64.0D;
++        // double d1 = 64.0D; // Jettpack
+ 
+         return distance < 4096.0D;
+     }
+@@ -249,7 +249,7 @@ public class FishingHook extends Projectile {
+                 this.setDeltaMovement(Vec3.ZERO);
+             }
+ 
+-            double d1 = 0.92D;
++            // double d1 = 0.92D; // Jettpack
+ 
+             this.setDeltaMovement(this.getDeltaMovement().scale(0.92D));
+             this.reapplyPosition();
+@@ -267,7 +267,7 @@ public class FishingHook extends Projectile {
+         boolean flag = itemstack.is(Items.FISHING_ROD);
+         boolean flag1 = itemstack1.is(Items.FISHING_ROD);
+ 
+-        if (!player.isRemoved() && player.isAlive() && (flag || flag1) && this.distanceToSqr(player) <= 1024.0D) {
++        if (!player.isRemoved() && player.isAlive() && (flag || flag1) && this.distanceToSqr((Entity) player) <= io.graphenemc.graphene.GrapheneConfig.fishingRodLength) { // Jettpack
+             return false;
+         } else {
+             this.discard();

@@ -1,0 +1,64 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NyCode <nico@nycode.de>
+Date: Tue, 27 Jul 2021 14:09:05 +0200
+Subject: [PATCH] Nyper: Implement IP Hiding
+
+
+diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+index 6f77562e81e741e4658219f002dcc881fc818e18..e3f9f4e621556e925364735670187d5d0636fd4f 100644
+--- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
++++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+@@ -312,4 +312,9 @@ public class GrapheneConfig {
+         }
+     }
+ 
++    public static boolean hidePlayerIps = false;
++    private static void hidePlayerIps() {
++        hidePlayerIps = getBoolean("settings.hide-player-ips", hidePlayerIps);
++    }
++
+ }
+diff --git a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
+index 875c8aeac041e860098d6b5b8df8a955907ed03e..4799a373e4eddff4816264e6e8bc099175c07d3f 100644
+--- a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
+@@ -226,6 +226,11 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener
+     }
+ 
+     public String getUserName() {
++        // Nyper start
++        if (io.graphenemc.graphene.GrapheneConfig.hidePlayerIps) {
++            return java.util.Objects.toString(this.gameProfile);
++        }
++        // Nyper end
+         // Paper start
+         String ip = com.destroystokyo.paper.PaperConfig.logPlayerIpAddresses ? String.valueOf(this.connection.getRemoteAddress()) : "<ip address withheld>";
+         return this.gameProfile != null ? this.gameProfile + " (" + ip + ")" : String.valueOf(ip);
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index 87439a6d4faa2556b61e95e82c2f59ab36905d65..1d36f28f2b0b5ae43f002770504b73f7c9316a04 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -487,9 +487,21 @@ public abstract class PlayerList {
+         // CraftBukkit - Moved from above, added world
+         // JettPack start -  configurable logging of player login location
+         if (io.graphenemc.graphene.GrapheneConfig.logPlayerLoginLoc) {
+-            PlayerList.LOGGER.info("{}[{}] logged in with entity id {} at ([{}]{}, {}, {})", player.getName().getString(), s1, player.getId(), worldserver1.serverLevelData.getLevelName(), player.getX(), player.getY(), player.getZ());
++            // Nyper start
++            if (io.graphenemc.graphene.GrapheneConfig.hidePlayerIps) {
++                PlayerList.LOGGER.info("{} logged in with entity id {} at ([{}]{}, {}, {})", player.getName().getString(), player.getId(), worldserver1.serverLevelData.getLevelName(), player.getX(), player.getY(), player.getZ());
++            } else {
++                PlayerList.LOGGER.info("{}[{}] logged in with entity id {} at ([{}]{}, {}, {})", player.getName().getString(), s1, player.getId(), worldserver1.serverLevelData.getLevelName(), player.getX(), player.getY(), player.getZ());
++            }
++            // Nyper end
+         } else {
+-            PlayerList.LOGGER.info("{}[{}] logged in with entity id {}", player.getName().getString(), s1, player.getId());
++            // Nyper start
++            if (io.graphenemc.graphene.GrapheneConfig.hidePlayerIps) {
++                PlayerList.LOGGER.info("{} logged in with entity id {}", player.getName().getString(), player.getId());
++            } else {
++                PlayerList.LOGGER.info("{}[{}] logged in with entity id {}", player.getName().getString(), s1, player.getId());
++            }
++            // Nyper end
+         }
+         // JettPack end
+     }

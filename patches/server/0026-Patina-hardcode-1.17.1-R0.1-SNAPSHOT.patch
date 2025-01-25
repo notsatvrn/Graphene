@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: foss-mc <69294560+foss-mc@users.noreply.github.com>
+Date: Mon, 28 Jun 2021 11:44:27 +0000
+Subject: [PATCH] Patina: hardcode 1.17.1-R0.1-SNAPSHOT
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+index 80f22a871e7f9aca6f6b1e0684deaedc42f121cf..e9971f5f70bffddb1342a33bb1b7847f69d08387 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+@@ -1,29 +1,7 @@
+ package org.bukkit.craftbukkit.util;
+ 
+-import java.io.IOException;
+-import java.io.InputStream;
+-import java.util.Properties;
+-import java.util.logging.Level;
+-import java.util.logging.Logger;
+-import org.bukkit.Bukkit;
+-
+ public final class Versioning {
+     public static String getBukkitVersion() {
+-        String result = "Unknown-Version";
+-
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/io.graphenemc.graphene/graphene-api/pom.properties"); // Airplane // Purpur // Graphene
+-        Properties properties = new Properties();
+-
+-        if (stream != null) {
+-            try {
+-                properties.load(stream);
+-
+-                result = properties.getProperty("version");
+-            } catch (IOException ex) {
+-                Logger.getLogger(Versioning.class.getName()).log(Level.SEVERE, "Could not get Bukkit version!", ex);
+-            }
+-        }
+-
+-        return result;
++        return "1.17.1-R0.1-SNAPSHOT"; // Patina
+     }
+ }

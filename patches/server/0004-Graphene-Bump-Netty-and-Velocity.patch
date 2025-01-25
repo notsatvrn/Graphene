@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: satvrn <pastawho@gmail.com>
+Date: Sun, 5 Dec 2021 21:24:00 +0000
+Subject: [PATCH] Graphene: Bump Netty and Velocity
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 7034afc94ef05c3e9fff8779e09237a2c849ef72..f2f0ff1c2a4f17a52d6c67380f630d49729c8971 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -44,12 +44,12 @@ dependencies {
+     runtimeOnly("org.apache.maven.resolver:maven-resolver-connector-basic:1.7.0")
+     runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.7.0")
+ 
+-    implementation("io.netty:netty-all:4.1.65.Final") // Paper
++    implementation("io.netty:netty-all:4.1.70.Final") // Paper
+     implementation("cat.inspiracio:rhino-js-engine:1.7.7.1") // Purpur
+     implementation("dev.omega24:upnp4j:1.0") // Purpur
+ 
+     implementation("net.fabricmc:mapping-io:0.3.0") // Paper - needed to read mappings for stacktrace deobfuscation
+-    implementation("com.velocitypowered:velocity-native:1.1.0-SNAPSHOT") // Paper
++    implementation("com.velocitypowered:velocity-native:1.1.9") // Paper
+ 
+     implementation("com.github.technove:AIR:fe3dbb4420") // Airplane - config
+     implementation("org.yaml:snakeyaml:1.28")

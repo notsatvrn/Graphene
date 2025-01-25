@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tom <cryptite@gmail.com>
+Date: Wed, 22 Sep 2021 09:41:27 -0500
+Subject: [PATCH] Slice: Set BlockData without light update
+
+
+diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
+index c4729769893fd3243ad60f4ad1bb3d7563ff775f..43a216600e2b38efe605b3c63537f4e2f159ad0d 100644
+--- a/src/main/java/org/bukkit/block/Block.java
++++ b/src/main/java/org/bukkit/block/Block.java
+@@ -290,6 +290,28 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+      */
+     void setBlockData(@NotNull BlockData data, boolean applyPhysics);
+ 
++    /**
++     * Sets the complete data for this block
++     *
++     * <br>
++     * Note that applyPhysics = false is not in general safe. It should only be
++     * used when you need to avoid triggering a physics update of neighboring
++     * blocks, for example when creating a {@link Bisected} block. If you are
++     * using a custom populator, then this parameter may also be required to
++     * prevent triggering infinite chunk loads on border blocks. This method
++     * should NOT be used to "hack" physics by placing blocks in impossible
++     * locations. Such blocks are liable to be removed on various events such as
++     * world upgrades. Furthermore setting large amounts of such blocks in close
++     * proximity may overload the server physics engine if an update is
++     * triggered at a later point. If this occurs, the resulting behavior is
++     * undefined.
++     *
++     * @param data new block specific data
++     * @param applyPhysics false to cancel physics from the changed block
++     * @param checkLight false to prevent a light-check update
++     */
++    void setBlockData(@NotNull BlockData data, boolean applyPhysics, boolean checkLight);
++
+     /**
+      * Sets the type of this block
+      *
