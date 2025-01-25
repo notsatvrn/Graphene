@@ -1,0 +1,80 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: notsatvrn <satvrn@gmx.com>
+Date: Fri, 24 Jan 2025 19:00:55 -0800
+Subject: [PATCH] VMP: general.ingredient_matching
+
+
+diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
+index 52063c1b14618cf132dcc45b0503e1aec838ec96..02a71199228a2395002909110dc39092a5255480 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
++++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
+@@ -29,6 +29,12 @@ import net.minecraft.world.item.Item;
+ import net.minecraft.world.item.ItemStack;
+ import net.minecraft.world.level.ItemLike;
+ 
++// VMP start - general.ingredient_matching
++import java.util.HashSet;
++import java.util.Set;
++import java.util.stream.Collectors;
++// VMP end
++
+ public final class Ingredient implements Predicate<ItemStack> {
+ 
+     public static final Ingredient EMPTY = new Ingredient(Stream.empty());
+@@ -38,6 +44,11 @@ public final class Ingredient implements Predicate<ItemStack> {
+     public boolean exact; // CraftBukkit
+     public Predicate<org.bukkit.inventory.ItemStack> predicate;
+ 
++    // VMP start - general.ingredient_matching
++    private Set<Item> matchingItems = null;
++    private boolean isEmptyMatch = false;
++    // VMP end
++
+     public Ingredient(Stream<? extends Ingredient.Value> entries) {
+         this.values = (Ingredient.Value[]) entries.toArray((i) -> {
+             return new Ingredient.Value[i];
+@@ -64,16 +75,19 @@ public final class Ingredient implements Predicate<ItemStack> {
+         if (itemstack == null) {
+             return false;
+         } else {
++            // VMP start - general.ingredient_matching
++            /*
+             this.dissolve();
+             if (this.itemStacks.length == 0) {
+                 return itemstack.isEmpty();
+             } else {
++            */
+                 // Purpur start
+                 if (predicate != null) {
+                     return predicate.test(itemstack.asBukkitCopy());
+                 }
+                 // Purpur end
+-
++            /*
+                 ItemStack[] aitemstack = this.itemStacks;
+                 int i = aitemstack.length;
+ 
+@@ -96,6 +110,23 @@ public final class Ingredient implements Predicate<ItemStack> {
+ 
+                 return false;
+             }
++            */
++
++            if (this.matchingItems == null) {
++                this.matchingItems = Arrays.stream(this.values)
++                        .flatMap(entry -> entry.getItems().stream())
++                        .filter(itemstack1 -> !itemstack1.isEmpty())
++                        .map(ItemStack::getItem)
++                        .collect(Collectors.toCollection(HashSet::new));
++                this.isEmptyMatch = this.matchingItems.isEmpty();
++            }
++
++            if (itemstack.isEmpty()) {
++                return this.isEmptyMatch;
++            }
++
++            return this.matchingItems.contains(itemstack.getItem());
++            // VMP end
+         }
+     }
+ 

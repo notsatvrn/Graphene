@@ -1,0 +1,57 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: peaches94 <peachescu94@gmail.com>
+Date: Sun, 10 Jul 2022 15:44:38 -0500
+Subject: [PATCH] Sakura: feat: reduce sensor work
+
+this patch is focused around the sensors used for ai
+delete the line of sight cache less often and use a faster nearby comparison
+
+Original license: GPLv3
+Original project: https://github.com/Bloom-host/Petal
+
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index 2e36a90b569916be36e8b4de158d090a1780db1e..74f92c3fa2e3b2e99d8ae560346e943e6194ff37 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -992,20 +992,22 @@ public abstract class LivingEntity extends Entity {
+         }
+
+         if (entity != null) {
+-            ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
++            // petal start - only do itemstack lookup if we need to
++            //ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
+             EntityType<?> entitytypes = entity.getType();
+
+             // Purpur start
+-            if (entitytypes == EntityType.SKELETON && itemstack.is(Items.SKELETON_SKULL)) {
++            if (entitytypes == EntityType.SKELETON && this.getItemBySlot(EquipmentSlot.HEAD).is(Items.SKELETON_SKULL)) {
+                 d0 *= entity.level.purpurConfig.skeletonHeadVisibilityPercent;
+             }
+-            else if (entitytypes == EntityType.ZOMBIE && itemstack.is(Items.ZOMBIE_HEAD)) {
++            else if (entitytypes == EntityType.ZOMBIE && this.getItemBySlot(EquipmentSlot.HEAD).is(Items.ZOMBIE_HEAD)) {
+                 d0 *= entity.level.purpurConfig.zombieHeadVisibilityPercent;
+             }
+-            else if (entitytypes == EntityType.CREEPER && itemstack.is(Items.CREEPER_HEAD)) {
++            else if (entitytypes == EntityType.CREEPER && this.getItemBySlot(EquipmentSlot.HEAD).is(Items.CREEPER_HEAD)) {
+                 d0 *= entity.level.purpurConfig.creeperHeadVisibilityPercent;
+             }
+             // Purpur end
++            // petal end
+
+             // Purpur start
+             if (entity instanceof LivingEntity entityliving) {
+diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
+index 6d258c8e4c4369c441059403c63f74ddc4c490f5..c05df9d7be95d2b1c989cca008a844f61aaa742b 100644
+--- a/src/main/java/net/minecraft/world/entity/Mob.java
++++ b/src/main/java/net/minecraft/world/entity/Mob.java
+@@ -870,8 +870,9 @@ public abstract class Mob extends LivingEntity {
+             return;
+         }
+         // Paper end
++        int i = this.level.getServer().getTickCount() + this.getId(); // petal
+         this.level.getProfiler().push("sensing");
+-        this.sensing.tick();
++        if (i % 10 == 0) this.sensing.tick(); // petal - only refresh line of sight cache every half second
+         this.level.getProfiler().pop();
+         this.level.getProfiler().push("targetSelector");
+         if (this.targetSelector.inactiveTick(this.activatedPriority, false)) // Airplane - use this to alternate ticking
