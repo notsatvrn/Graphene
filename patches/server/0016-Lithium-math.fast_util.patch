@@ -3,6 +3,8 @@ From: notsatvrn <satvrn@gmx.com>
 Date: Fri, 24 Jan 2025 23:39:37 -0800
 Subject: [PATCH] Lithium: math.fast_util
 
+Original code by JellySquid, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/CaffeineMC/lithium-fabric/ (Yarn mappings)
 
 diff --git a/src/main/java/net/minecraft/core/AxisCycle.java b/src/main/java/net/minecraft/core/AxisCycle.java
 index b5d8a60dc78a76c0a55bfc30cc49d26857bd914a..1550b44dac36b4136c29afea1956c041dab780a6 100644

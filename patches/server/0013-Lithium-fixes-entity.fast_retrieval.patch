@@ -3,6 +3,9 @@ From: foss-mc <69294560+foss-mc@users.noreply.github.com>
 Date: Thu, 7 Oct 2021 04:03:29 +0000
 Subject: [PATCH] Lithium: fixes: entity.fast_retrieval
 
+Original code by JellySquid, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/CaffeineMC/lithium-fabric/ (Yarn mappings)
+
 https://github.com/CaffeineMC/lithium-fabric/commit/b34ac353bc6bd97d1b436898f353f998d29626a4 & https://github.com/CaffeineMC/lithium-fabric/commit/7616d35d922bb3cbed1ab0ef7c3993b7a15cfbdc
 
 diff --git a/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java b/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java

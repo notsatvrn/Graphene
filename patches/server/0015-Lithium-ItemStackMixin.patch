@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: notsatvrn <satvrn@gmx.com>
+Date: Sat, 25 Jan 2025 11:41:37 -0800
+Subject: [PATCH] Lithium: ItemStackMixin
+
+Original code by JellySquid, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/CaffeineMC/lithium-fabric/ (Yarn mappings)
+
+diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
+index 26a3e48bd4e8fbc437689c606816cafa229efa6d..142b58da180c9bc9a0308de873385c4bb7c52164 100644
+--- a/src/main/java/net/minecraft/world/item/ItemStack.java
++++ b/src/main/java/net/minecraft/world/item/ItemStack.java
+@@ -239,8 +239,11 @@ public final class ItemStack {
+ 
+     private void updateEmptyCacheFlag() {
+         if (this.emptyCacheFlag && this == ItemStack.EMPTY) throw new AssertionError("TRAP"); // CraftBukkit
+-        this.emptyCacheFlag = false;
+-        this.emptyCacheFlag = this.isEmpty();
++        // Lithium start - ItemStackMixin
++        //this.emptyCacheFlag = false;
++        //this.emptyCacheFlag = this.isEmpty();
++        this.emptyCacheFlag = (this == ItemStack.EMPTY || this.item == null || this.item == Items.AIR || this.count <= 0);
++        // Lithium end
+     }
+ 
+     // CraftBukkit - break into own method
+@@ -278,7 +281,8 @@ public final class ItemStack {
+     }
+ 
+     public boolean isEmpty() {
+-        return this == ItemStack.EMPTY || this.item == null || this.item == Items.AIR || this.count <= 0; // Paper
++        //return this == ItemStack.EMPTY || this.item == null || this.item == Items.AIR || this.count <= 0; // Paper
++        return this.emptyCacheFlag; // Lithium - ItemStackMixin
+     }
+ 
+     public ItemStack split(int amount) {

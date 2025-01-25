@@ -3,7 +3,8 @@ From: Simon Gardling <titaniumtown@gmail.com>
 Date: Sun, 12 Dec 2021 16:41:06 -0500
 Subject: [PATCH] Lithium: replace AI goal set with optimized collection
 
-Original code licensed under GNU Lesser General Public License v3.0 and created for the lithium project: https://github.com/CaffeineMC/lithium-fabric/
+Original code by JellySquid, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/CaffeineMC/lithium-fabric/ (Yarn mappings)
 
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
 index 441e2edd8357c4f11093b4dee2192780ac3f3579..d3c8a961ee27c716f2128a9145a7e9ff28b2ccd6 100644

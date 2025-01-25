@@ -25,10 +25,10 @@ index a11a7deefb7fdf7ca9b23f85f5ae5f7c8ca935ac..8234c87f1a74ba5761efb3d00fc4b91c
                      org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDropItemEvent(bblock, state, this.player, itemsToDrop); // Paper - use stored ref
                  }
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 26a3e48bd4e8fbc437689c606816cafa229efa6d..56cc6455438c26b7e295540f0f43c7a63e96b6a3 100644
+index 142b58da180c9bc9a0308de873385c4bb7c52164..fc5f0c41645f530578a369d3cbce7050735aff81 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -323,6 +323,7 @@ public final class ItemStack {
+@@ -327,6 +327,7 @@ public final class ItemStack {
                  }
              }
              Item item = this.getItem();

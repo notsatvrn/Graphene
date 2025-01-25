@@ -1,0 +1,113 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: JellySquid <jellysquid+atwork@protonmail.com>
+Date: Tue, 4 Aug 2020 21:46:05 +0200
+Subject: [PATCH] Lithium: entity.data_tracker.use_arrays
+
+Original code by JellySquid, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/CaffeineMC/lithium-fabric/ (Yarn mappings)
+
+Co-authored-by: tr7zw <tr7zw@live.de>
+
+Updated to 1.17 by: notsatvrn <satvrn@gmx.com>
+
+diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
+index 4df12454001f0de5f358c88d876e34c35a736c42..5921fefec550fdbee1b0ecac50afdcecb10bb507 100644
+--- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
++++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
+@@ -35,6 +35,76 @@ public class SynchedEntityData {
+     private boolean isEmpty = true;
+     private boolean isDirty;
+ 
++    // Lithium start - entity.data_tracker.use_arrays
++    private static final int DEFAULT_ENTRY_COUNT = 10, GROW_FACTOR = 8;
++    /** Mirrors the vanilla backing entries map. Each SynchedEntityData.DataItem can be accessed in this array through its ID. **/
++    private SynchedEntityData.DataItem<?>[] entriesArray = new SynchedEntityData.DataItem<?>[DEFAULT_ENTRY_COUNT];
++
++    /**
++     * We redirect the call to add a tracked data to the internal map so we can add it to our new storage structure. This
++     * should only ever occur during entity initialization. Type-erasure is a bit of a pain here since we must redirect
++     * a calls to the generic Map interface.
++     */
++    private Object onAddTrackedDataInsertMap(Int2ObjectMap<SynchedEntityData.DataItem<?>> map, int keyRaw, SynchedEntityData.DataItem<?> valueRaw) {
++        int k = keyRaw;
++        SynchedEntityData.DataItem<?> v = (SynchedEntityData.DataItem<?>) valueRaw;
++
++        SynchedEntityData.DataItem<?>[] storage = this.entriesArray;
++
++        // Check if we need to grow the backing array to accommodate the new key range
++        if (storage.length <= k) {
++            // Grow the array to accommodate 8 entries after this one, but limit it to never be larger
++            // than 256 entries as per the vanilla limit
++            int newSize = Math.min(k + GROW_FACTOR, 256);
++
++            this.entriesArray = storage = java.util.Arrays.copyOf(storage, newSize);
++        }
++
++        // Update the storage
++        storage[k] = v;
++
++        // Ensure that the vanilla backing storage is still updated appropriately
++        return this.itemsById.put(k, v);
++    }
++
++    /**
++     * @reason Avoid integer boxing/unboxing and use our array-based storage
++     * @author JellySquid
++     */
++    private <T> SynchedEntityData.DataItem<T> getEntry(EntityDataAccessor<T> data) {
++        try {
++            SynchedEntityData.DataItem<?>[] array = this.entriesArray;
++
++            int id = data.getId();
++
++            // The vanilla implementation will simply return null if the tracker doesn't contain the specified entry. However,
++            // accessing an array with an invalid pointer will throw a OOB exception, where-as a HashMap would simply
++            // return null. We check this case (which should be free, even if so insignificant, as the subsequent bounds
++            // check will hopefully be eliminated)
++            if (id < 0 || id >= array.length) {
++                return null;
++            }
++
++            // This cast can fail if trying to access a entry which doesn't belong to this tracker, as the ID could
++            // instead point to an entry of a different type. However, that is also vanilla behaviour.
++            // noinspection unchecked
++            return (SynchedEntityData.DataItem<T>) array[id];
++        } catch (Throwable cause) {
++            // Move to another method so this function can be in-lined better
++            throw onGetException(cause, data);
++        }
++    }
++
++    private static <T> ReportedException onGetException(Throwable cause, EntityDataAccessor<T> data) {
++        CrashReport report = CrashReport.forThrowable(cause, "Getting synced entity data");
++
++        net.minecraft.CrashReportCategory category = report.addCategory("Synced entity data");
++        category.setDetail("Data ID", data);
++
++        return new ReportedException(report);
++    }
++    // Lithium end
++
+     public SynchedEntityData(Entity trackedEntity) {
+         this.entity = trackedEntity;
+     }
+@@ -101,7 +171,8 @@ public class SynchedEntityData {
+         SynchedEntityData.DataItem<T> datawatcher_item = new SynchedEntityData.DataItem<>(datawatcherobject, t0);
+ 
+         // this.lock.writeLock().lock(); // Spigot - not required
+-        this.itemsById.put(datawatcherobject.getId(), datawatcher_item);
++        //this.itemsById.put(datawatcherobject.getId(), datawatcher_item);
++        this.onAddTrackedDataInsertMap(this.itemsById, datawatcherobject.getId(), datawatcher_item); // Lithium - entity.data_tracker.use_arrays
+         this.isEmpty = false;
+         // this.lock.writeLock().unlock(); // Spigot - not required
+     }
+@@ -132,7 +203,8 @@ public class SynchedEntityData {
+     }
+ 
+     public <T> T get(EntityDataAccessor<T> data) {
+-        return this.getItem(data).getValue();
++        //return this.getItem(data).getValue();
++        return getEntry(data).getValue(); // Lithium - entity.data_tracker.use_arrays
+     }
+ 
+     public <T> void set(EntityDataAccessor<T> key, T value) {

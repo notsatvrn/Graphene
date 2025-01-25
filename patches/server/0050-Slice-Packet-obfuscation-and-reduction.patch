@@ -41,10 +41,10 @@ index 3e17f6131bf590d7c4a16b79c1c145cb4f565bc9..e1233fa58d068448d0accef7a7f6725f
          this.id = buf.readVarInt();
          this.packedItems = SynchedEntityData.unpack(buf);
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index 4df12454001f0de5f358c88d876e34c35a736c42..72c74d2369a36b14f1103aa74b096f50e7990f4d 100644
+index 5921fefec550fdbee1b0ecac50afdcecb10bb507..eadf67bd112d37f075105f7cf75524e18e9bee40 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-@@ -136,6 +136,11 @@ public class SynchedEntityData {
+@@ -208,6 +208,11 @@ public class SynchedEntityData {
      }
  
      public <T> void set(EntityDataAccessor<T> key, T value) {
@@ -56,7 +56,7 @@ index 4df12454001f0de5f358c88d876e34c35a736c42..72c74d2369a36b14f1103aa74b096f50
          SynchedEntityData.DataItem<T> datawatcher_item = this.getItem(key);
  
          if (ObjectUtils.notEqual(value, datawatcher_item.getValue())) {
-@@ -145,6 +150,11 @@ public class SynchedEntityData {
+@@ -217,6 +222,11 @@ public class SynchedEntityData {
              this.isDirty = true;
          }
  
@@ -68,7 +68,7 @@ index 4df12454001f0de5f358c88d876e34c35a736c42..72c74d2369a36b14f1103aa74b096f50
      }
  
      // CraftBukkit start - add method from above
-@@ -200,6 +210,28 @@ public class SynchedEntityData {
+@@ -272,6 +282,28 @@ public class SynchedEntityData {
          return list;
      }
  
@@ -97,7 +97,7 @@ index 4df12454001f0de5f358c88d876e34c35a736c42..72c74d2369a36b14f1103aa74b096f50
      @Nullable
      public List<SynchedEntityData.DataItem<?>> getAll() {
          List<SynchedEntityData.DataItem<?>> list = null;
-@@ -313,11 +345,14 @@ public class SynchedEntityData {
+@@ -385,11 +417,14 @@ public class SynchedEntityData {
          final EntityDataAccessor<T> accessor;
          T value;
          private boolean dirty;
@@ -112,7 +112,7 @@ index 4df12454001f0de5f358c88d876e34c35a736c42..72c74d2369a36b14f1103aa74b096f50
          }
  
          public EntityDataAccessor<T> getAccessor() {
-@@ -343,5 +378,34 @@ public class SynchedEntityData {
+@@ -415,5 +450,34 @@ public class SynchedEntityData {
          public SynchedEntityData.DataItem<T> copy() {
              return new SynchedEntityData.DataItem<>(this.accessor, this.accessor.getSerializer().copy(this.value));
          }

@@ -3,6 +3,8 @@ From: Simon Gardling <titaniumtown@gmail.com>
 Date: Tue, 9 Nov 2021 16:53:39 -0500
 Subject: [PATCH] Lithium: reduce allocs
 
+Original code by JellySquid, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/CaffeineMC/lithium-fabric/ (Yarn mappings)
 
 diff --git a/src/main/java/me/jellysquid/mods/lithium/common/util/ArrayConstants.java b/src/main/java/me/jellysquid/mods/lithium/common/util/ArrayConstants.java
 new file mode 100644
