@@ -41,7 +41,7 @@ index 2e36a90b569916be36e8b4de158d090a1780db1e..74f92c3fa2e3b2e99d8ae560346e943e
              // Purpur start
              if (entity instanceof LivingEntity entityliving) {
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 6d258c8e4c4369c441059403c63f74ddc4c490f5..c05df9d7be95d2b1c989cca008a844f61aaa742b 100644
+index 2072292355ec97c5027de48f0f42fc24d864c35a..9458a28c7973317d3756fc9627dc8ae8a69a4bbb 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -870,8 +870,9 @@ public abstract class Mob extends LivingEntity {

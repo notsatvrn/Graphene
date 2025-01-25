@@ -143,7 +143,7 @@ index 0000000000000000000000000000000000000000..7241d56b3576685e71ba8d65fcee5cb3
 +
 +}
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-index 26ebbdb97b4dd8b92ee66c56970663541e2dd305..2c2cf1f1bce6bf5058bd89dba02f3d5c44d225fc 100644
+index 69df938f16a8d604a937189cb63cc94036e9541b..898aadf76f93d3d98a4ba74e96832c58ecb6f8d1 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 @@ -13,6 +13,7 @@ import org.simpleyaml.exceptions.InvalidConfigurationException;
@@ -166,8 +166,8 @@ index 26ebbdb97b4dd8b92ee66c56970663541e2dd305..2c2cf1f1bce6bf5058bd89dba02f3d5c
      }
  
      protected static void log(String s) {
-@@ -231,4 +237,21 @@ public class GrapheneConfig {
-         fishingRodLength = getDouble("settings.fishing-rod-length", fishingRodLength);
+@@ -246,4 +252,21 @@ public class GrapheneConfig {
+         }
      }
  
 +    // Stop Command

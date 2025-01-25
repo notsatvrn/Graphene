@@ -1,0 +1,119 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phoenix616 <mail@moep.tv>
+Date: Sun, 29 Dec 2019 00:53:17 +0100
+Subject: [PATCH] Origami: Add options for modifying pigmen farm behaviour
+
+Original code by Phoenix616, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/Minebench/Origami/
+
+Now updated to work better with Purpur.
+
+Updated to 1.17 by: notsatvrn <satvrn@gmx.com>
+
+diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+index 87365ac92c631e926607f57ae9379cca2d951ccc..9f488e43688de08b04efd8f122ac650607274b50 100644
+--- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
++++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
+@@ -229,4 +229,19 @@ public class GrapheneConfig {
+         fishingRodLength = getDouble("settings.fishing-rod-length", fishingRodLength);
+     }
+ 
++    public static double pigmenPortalBoost = 0.0;
++    public static boolean pigmenFarmsWaterAi = false;
++    public static int pigmenFarmsRadius = 16;
++    public static int pigmenFarmsCount = 5;
++    private static void pigmenImprovements() {
++        pigmenPortalBoost = getDouble("pigmen.portal-boost", pigmenPortalBoost);
++        pigmenFarmsWaterAi = getBoolean("pigmen.farms.water-ai", pigmenFarmsWaterAi);
++        pigmenFarmsRadius = getInt("pigmen.farms.radius", pigmenFarmsRadius);
++        pigmenFarmsCount = getInt("pigmen.farms.count", pigmenFarmsCount);
++        if (pigmenFarmsWaterAi) {
++            Bukkit.getLogger().info("Pigmen water AI in farms is enabled");
++            Bukkit.getLogger().info("Farm detection radius: " + pigmenFarmsRadius + ", count: " + pigmenFarmsCount);
++        }
++    }
++
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 297ecb57f253296be201001ed23113418a7c4dd1..3fd3eb4d20c6e4c65b4c0924fad529da2311204f 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -335,6 +335,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+     public boolean isTemporarilyActive = false; // Paper
+     public boolean spawnedViaMobSpawner; // Paper - Yes this name is similar to above, upstream took the better one
+     public boolean fromNetherPortal; // Paper
++    public boolean fromMobFarm = false; // Origami - Detect Mobs from mob farms
+     protected int numCollisions = 0; // Paper
+     public void inactiveTick() { }
+     // Spigot end
+@@ -2184,6 +2185,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+                 nbt.putBoolean("Paper.FromNetherPortal", true);
+             }
+             // Paper end
++            // Origami start
++            if (fromMobFarm) {
++                nbt.putBoolean("Origami.FromMobFarm", true);
++            }
++            // Origami end
+             return nbt;
+         } catch (Throwable throwable) {
+             CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
+@@ -2348,6 +2354,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+                 spawnReason = org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.DEFAULT;
+             }
+             // Paper end
++            fromMobFarm = nbt.getBoolean("Origami.FromMobFarm"); // Origami - Restore entity's from mob farm status
+ 
+         } catch (Throwable throwable) {
+             CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
+diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
+index 1b3739b7288cbb95c0c844b9e6261fb123d56d6a..6d65eebbba098f9ead0ec7e98b3fc9b8e48c1189 100644
+--- a/src/main/java/net/minecraft/world/entity/Mob.java
++++ b/src/main/java/net/minecraft/world/entity/Mob.java
+@@ -860,7 +860,7 @@ public abstract class Mob extends LivingEntity {
+     @Override
+     protected final void serverAiStep() {
+         ++this.noActionTime;
+-        if (!this.aware) { // Paper start - Allow nerfed mobs to jump, float and take water damage
++        if (!this.aware || this.fromMobFarm && this.isInWater()) { // Paper start - Allow nerfed mobs to jump, float and take water damage // Origami - Mobfarm water ai
+             if (goalFloat != null) {
+                 if (goalFloat.canUse()) goalFloat.tick();
+                 this.getJumpControl().tick();
+diff --git a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
+index c42349d0f6b0025525278295b36f4030f122800e..eb9714fab9ad4cf0e56f79e93629cddd5762f425 100644
+--- a/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/NetherPortalBlock.java
+@@ -68,6 +68,13 @@ public class NetherPortalBlock extends Block {
+                     entity.setPortalCooldown();
+                     entity.fromNetherPortal = true; // Paper
+                     if (world.paperConfig.nerfNetherPortalPigmen) ((net.minecraft.world.entity.Mob) entity).aware = false; // Paper
++                    // Origami start - Pigmen farm improvements
++                    if (io.graphenemc.graphene.GrapheneConfig.pigmenFarmsWaterAi && io.graphenemc.graphene.GrapheneConfig.pigmenFarmsCount > 0 && io.graphenemc.graphene.GrapheneConfig.pigmenFarmsRadius > 0) {
++                        if (world.getEntitiesOfClass(net.minecraft.world.entity.monster.ZombifiedPiglin.class, new net.minecraft.world.phys.AABB(pos).inflate(io.graphenemc.graphene.GrapheneConfig.pigmenFarmsRadius), e -> true).size() > io.graphenemc.graphene.GrapheneConfig.pigmenFarmsCount) {
++                            entity.fromMobFarm = true;
++                        }
++                    }
++                    // Origami end
+                 }
+             }
+         }
+@@ -95,6 +102,19 @@ public class NetherPortalBlock extends Block {
+                 return;
+             }
+             // Purpur end
++            // Origami start - Pig Zombie portal boost
++            if (entity instanceof net.minecraft.world.entity.monster.ZombifiedPiglin && io.graphenemc.graphene.GrapheneConfig.pigmenPortalBoost > 0) {
++                net.minecraft.world.phys.Vec3 velocity = new net.minecraft.world.phys.Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z);
++                if (entity.getDirection().getAxis() != state.getValue(NetherPortalBlock.AXIS)) {
++                    velocity = velocity.yRot(90f); // Rotate around y axis
++                }
++                velocity = velocity
++                        .normalize()
++                        .scale(io.graphenemc.graphene.GrapheneConfig.pigmenPortalBoost);
++                entity.move(net.minecraft.world.entity.MoverType.SELF, velocity);
++                return;
++            }
++            // Origami end
+             // CraftBukkit start - Entity in portal
+             EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), pos.getX(), pos.getY(), pos.getZ()));
+             world.getCraftServer().getPluginManager().callEvent(event);

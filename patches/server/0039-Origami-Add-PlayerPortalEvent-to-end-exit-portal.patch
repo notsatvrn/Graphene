@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phoenix616 <mail@moep.tv>
+Date: Mon, 20 Jan 2020 18:51:00 +0100
+Subject: [PATCH] Origami: Add PlayerPortalEvent to end exit portal
+
+Original code by Phoenix616, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/Minebench/Origami/
+
+Updated to 1.17 by: notsatvrn <satvrn@gmx.com>
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 873632b2e9a0d8733af04403dfb2e2fb0f7337c4..eb2a100348bf6177cea1cdbcbfd19cb091acf667 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -1083,6 +1083,18 @@ public class ServerPlayer extends Player {
+         ResourceKey<DimensionType> resourcekey = worldserver1.getTypeKey(); // CraftBukkit
+ 
+         if (resourcekey == DimensionType.END_LOCATION && worldserver != null && worldserver.getTypeKey() == DimensionType.OVERWORLD_LOCATION) { // CraftBukkit
++            // Origami start - add PlayerPortalEvent to leaving the end
++            Location exit = this.getBukkitEntity().getBedSpawnLocation();
++            PlayerPortalEvent event = new PlayerPortalEvent(this.getBukkitEntity(), this.getBukkitEntity().getLocation(), exit, cause, 0, true, 0);
++            Bukkit.getServer().getPluginManager().callEvent(event);
++            if (event.isCancelled()) {
++                return null;
++            }
++
++            if (event.getTo() == null || !event.getTo().equals(this.getBukkitEntity().getBedSpawnLocation())) {
++                this.getBukkitEntity().setBedSpawnLocation(event.getTo(), true);
++            }
++            // Origami end
+             this.isChangingDimension = true; // CraftBukkit - Moved down from above
+             this.unRide();
+             this.getLevel().removePlayerImmediately(this, Entity.RemovalReason.CHANGED_DIMENSION);

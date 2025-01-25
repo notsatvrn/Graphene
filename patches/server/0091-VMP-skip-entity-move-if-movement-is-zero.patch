@@ -6,10 +6,10 @@ Subject: [PATCH] VMP: skip entity move if movement is zero
 Code originally licensed under the MIT license and created for the VMP project: https://github.com/RelativityMC/VMP-fabric
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 2506776f2927d332c9d7500c57ec9a729d7d23fa..2f25bd36d3d909baa6a716b18b0a0d1848e65e03 100644
+index a4f6040e4284be11a88a77b92e4a84d2bd0701af..586a6a88d6728d345b062a7f2651210ee1b2a038 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -947,6 +947,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -948,6 +948,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
      // Paper end - detailed watchdog information
  
      public void move(MoverType movementType, Vec3 movement) {

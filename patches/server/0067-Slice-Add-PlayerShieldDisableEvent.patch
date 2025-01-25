@@ -5,7 +5,7 @@ Subject: [PATCH] Slice: Add PlayerShieldDisableEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 1b3739b7288cbb95c0c844b9e6261fb123d56d6a..260d398125b986e137b82160f98048c81c33952d 100644
+index 6d65eebbba098f9ead0ec7e98b3fc9b8e48c1189..894c9f501390a8985075c1a3a97f6157abf4f744 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -1641,6 +1641,7 @@ public abstract class Mob extends LivingEntity {

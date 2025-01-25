@@ -27,10 +27,10 @@ index 7740a4d7652d23460017ca2abfc3dcd838ce9e99..56271f23fc8fbaa4eccc80fa61e49011
              if (i != 0) {
                  int j = entitytypes.updateInterval();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 297ecb57f253296be201001ed23113418a7c4dd1..e8d30b8af62df36dd159b01f76d75eb110e697c9 100644
+index bbdd9a004c7b233ce9517a78808034047dcaec3e..24e7aaf3e17e8716c77a55789de8d53482835caa 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -344,6 +344,8 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -345,6 +345,8 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
      public final gg.airplane.entity.CollisionCache collisionCache = new gg.airplane.entity.CollisionCache(this);
      // Airplane end
  

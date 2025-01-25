@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..6320ee263b52f0782740cbcb2df7af28
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/util/Mth.java b/src/main/java/net/minecraft/util/Mth.java
-index cf11c58b2496d15e7da1ee6bc6543a09d609cf12..fe79214f8049c5c2cef88475aea933263fd50b8c 100644
+index cf11c58b2496d15e7da1ee6bc6543a09d609cf12..db6affe600a507a5955824887066350bce79e19c 100644
 --- a/src/main/java/net/minecraft/util/Mth.java
 +++ b/src/main/java/net/minecraft/util/Mth.java
 @@ -24,7 +24,7 @@ public class Mth {
@@ -116,17 +116,17 @@ index cf11c58b2496d15e7da1ee6bc6543a09d609cf12..fe79214f8049c5c2cef88475aea93326
          }
 @@ -40,11 +40,13 @@ public class Mth {
      private static final double[] COS_TAB = new double[257];
-
+ 
      public static float sin(float value) {
 -        return SIN[(int)(value * 10430.378F) & '\uffff'];
 +        //return SIN[(int)(value * 10430.378F) & '\uffff'];
 +        return me.jellysquid.mods.lithium.common.util.math.CompactSineLUT.sin(value); // Lithium - math.sine_lut
      }
-
+ 
      public static float cos(float value) {
 -        return SIN[(int)(value * 10430.378F + 16384.0F) & '\uffff'];
 +        //return SIN[(int)(value * 10430.378F + 16384.0F) & '\uffff'];
 +        return me.jellysquid.mods.lithium.common.util.math.CompactSineLUT.cos(value); // Lithium - math.sine_lut
      }
-
+ 
      public static float sqrt(float value) {

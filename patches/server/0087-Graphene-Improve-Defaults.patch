@@ -210,7 +210,7 @@ index 44f3d6a5e2729507fcc7246149183c304fb3ad97..a288dab89d4e1687cbe754f1f65eeaf4
          setComment("projectile", "Optimizes projectile settings");
      }
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-index a5a1003a6dd1ec69148d292d9f28199c90e35927..6f77562e81e741e4658219f002dcc881fc818e18 100644
+index 00fe4645264618121dfd1e1239fa9cfc3ba37586..719f291d21cfd7642503dd9b840c29624ab9d846 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 @@ -213,7 +213,7 @@ public class GrapheneConfig {

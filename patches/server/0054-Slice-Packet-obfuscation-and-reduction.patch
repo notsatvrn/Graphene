@@ -41,7 +41,7 @@ index 3e17f6131bf590d7c4a16b79c1c145cb4f565bc9..e1233fa58d068448d0accef7a7f6725f
          this.id = buf.readVarInt();
          this.packedItems = SynchedEntityData.unpack(buf);
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index 5921fefec550fdbee1b0ecac50afdcecb10bb507..eadf67bd112d37f075105f7cf75524e18e9bee40 100644
+index 7c87589ebc134aff97edae574fe00ceecad7f1ef..93885c44563053fbaa286aca11c2c8b380ef66f4 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 @@ -208,6 +208,11 @@ public class SynchedEntityData {
@@ -173,10 +173,10 @@ index 148f205d61d654aecab596350c394751080c18e8..a14ec21c87b4b805f166e66257ed83f1
  
          if (this.entity instanceof LivingEntity) {
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index e8d30b8af62df36dd159b01f76d75eb110e697c9..699843aff86a24465408c8ffd300e12747cb1523 100644
+index 24e7aaf3e17e8716c77a55789de8d53482835caa..7f7bd3bd08b94b3dddc4cdc53266f3f44e56ff89 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -2994,7 +2994,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -3017,7 +3017,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
          if (event.isCancelled()) {
              return;
          }

@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Phoenix616 <max@themoep.de>
+Date: Thu, 3 Jun 2021 16:11:26 +0100
+Subject: [PATCH] Origami: Fix missing particles
+
+This fixes some cases where particles are present in single player but
+ not in multiplayer by forwarding the addParticle call (which is usually
+ only used when the world is clientside) to the sendParticles method.
+
+A quick check has shown no case where both, broadcastEffect and the
+ addParticle method is used, only some where the clientside check is
+ completely missing so this should not produce duplicate particles.
+
+Original code by Phoenix616, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/Minebench/Origami/
+
+Updated to 1.17 by: notsatvrn <satvrn@gmx.com>
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index 1b8e804d811610a0f7bd1def6a1bc44b553d2b48..7980741f5a8d434f4a9caa40357879daf0490edc 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -1661,6 +1661,13 @@ public class ServerLevel extends Level implements WorldGenLevel {
+         this.getChunkSource().broadcastAndSend(entity, new ClientboundEntityEventPacket(entity, status));
+     }
+ 
++    // Origami start - Fix missing particles
++    @Override
++    public void addParticle(ParticleOptions parameters, double x, double y, double z, double offsetX, double offsetY, double offsetZ) {
++        sendParticles(null, parameters, x, y, z, 1, offsetX, offsetY, offsetZ, 0d, false);
++    }
++    // Origami end
++
+     @Override
+     public ServerChunkCache getChunkSource() {
+         return this.chunkSource;

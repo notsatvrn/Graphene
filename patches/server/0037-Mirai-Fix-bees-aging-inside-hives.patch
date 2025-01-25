@@ -5,7 +5,7 @@ Subject: [PATCH] Mirai: Fix bees aging inside hives
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/BeehiveBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/BeehiveBlockEntity.java
-index e0e039e2f614f2df48d8d1b6e8bbbe7a72d96d6f..6f86ded3b5b9dd1efda564fa126ca7ccd67365ba 100644
+index e0e039e2f614f2df48d8d1b6e8bbbe7a72d96d6f..b51a8789cf58a9ae1a3ef06012bc58299c928dea 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/BeehiveBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/BeehiveBlockEntity.java
 @@ -315,17 +315,18 @@ public class BeehiveBlockEntity extends BlockEntity {
@@ -25,7 +25,7 @@ index e0e039e2f614f2df48d8d1b6e8bbbe7a72d96d6f..6f86ded3b5b9dd1efda564fa126ca7cc
                      // CraftBukkit end
                  }
              }
-+			tileentitybeehive_hivebee.exitTickCounter++; // Mirai
++            tileentitybeehive_hivebee.exitTickCounter++; // Mirai
          }
  
      }
@@ -33,7 +33,7 @@ index e0e039e2f614f2df48d8d1b6e8bbbe7a72d96d6f..6f86ded3b5b9dd1efda564fa126ca7cc
  
          final CompoundTag entityData;
          int ticksInHive;
-+		int exitTickCounter; // Mirai - separate counter for checking if bee should exit to reduce exit attempts
++        int exitTickCounter; // Mirai - separate counter for checking if bee should exit to reduce exit attempts
          final int minOccupationTicks;
  
          BeeData(CompoundTag nbttagcompound, int i, int j) {
@@ -41,7 +41,7 @@ index e0e039e2f614f2df48d8d1b6e8bbbe7a72d96d6f..6f86ded3b5b9dd1efda564fa126ca7cc
              this.entityData = nbttagcompound;
              this.ticksInHive = i;
              this.minOccupationTicks = j;
-+			this.exitTickCounter = this.ticksInHive; // Mirai
++            this.exitTickCounter = this.ticksInHive; // Mirai
          }
      }
  }

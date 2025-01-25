@@ -5,7 +5,7 @@ Subject: [PATCH] Slice: Smooth World Teleports
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 873632b2e9a0d8733af04403dfb2e2fb0f7337c4..cf9a4b9dd555af8316301cfbc290cc489738aaac 100644
+index eb2a100348bf6177cea1cdbcbfd19cb091acf667..5a0cbaf94796a979c84d9426d3412955298d4c7c 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -267,6 +267,7 @@ public class ServerPlayer extends Player {

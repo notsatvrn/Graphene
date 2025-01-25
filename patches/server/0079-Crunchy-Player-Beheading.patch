@@ -60,7 +60,7 @@ index 6ac23911fb79ae0d30fcd2c156760283410d6d08..233078510af4e9a45a201c622b3c8f63
      public boolean chickenAvoidFox;
      public float chickenAvoidFoxDistance;
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index cf9a4b9dd555af8316301cfbc290cc489738aaac..ad491373033b4233ff266217a9f255566ba2a8a2 100644
+index 5a0cbaf94796a979c84d9426d3412955298d4c7c..8d375e132e76e52aed68fd2e9c335c06e13a6191 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -859,7 +859,19 @@ public class ServerPlayer extends Player {

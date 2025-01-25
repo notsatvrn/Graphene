@@ -5,10 +5,10 @@ Subject: [PATCH] Nyper: Implement IP Hiding
 
 
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-index 6f77562e81e741e4658219f002dcc881fc818e18..e3f9f4e621556e925364735670187d5d0636fd4f 100644
+index 719f291d21cfd7642503dd9b840c29624ab9d846..60f5800282ed1c1c0606cc6f2824e19a306d715f 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-@@ -312,4 +312,9 @@ public class GrapheneConfig {
+@@ -327,4 +327,9 @@ public class GrapheneConfig {
          }
      }
  

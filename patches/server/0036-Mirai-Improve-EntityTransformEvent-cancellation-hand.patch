@@ -5,7 +5,7 @@ Subject: [PATCH] Mirai: Improve EntityTransformEvent cancellation handling
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index f21c0ef251f5fd830c72cacba7ce909e78dc96cb..26f540061f431c3d07196dd10a1d2d7468707d28 100644
+index f21c0ef251f5fd830c72cacba7ce909e78dc96cb..8b57f1a624af3eac8f2b30c424e3ce6ba2f7ca10 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
 @@ -917,7 +917,6 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
@@ -20,10 +20,10 @@ index f21c0ef251f5fd830c72cacba7ce909e78dc96cb..26f540061f431c3d07196dd10a1d2d74
              entitywitch.setPersistenceRequired();
              // CraftBukkit start
              if (CraftEventFactory.callEntityTransformEvent(this, entitywitch, EntityTransformEvent.TransformReason.LIGHTNING).isCancelled()) {
-+				super.thunderHit(world, lightning); // Mirai - didn't cancel the lighting, just the transformation
++                super.thunderHit(world, lightning); // Mirai - didn't cancel the lighting, just the transformation
                  return;
              }
-+			if (org.spigotmc.SpigotConfig.logVillagerDeaths) Villager.LOGGER.info("Villager {} was struck by lightning {}.", this, lightning); // Paper - move log down, event can cancel - // Mirai - move even further down because if transformation is cancelled, the entity won't die
++            if (org.spigotmc.SpigotConfig.logVillagerDeaths) Villager.LOGGER.info("Villager {} was struck by lightning {}.", this, lightning); // Paper - move log down, event can cancel - // Mirai - move even further down because if transformation is cancelled, the entity won't die
              world.addAllEntities(entitywitch, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.LIGHTNING);
              // CraftBukkit end
              this.releaseAllPois();

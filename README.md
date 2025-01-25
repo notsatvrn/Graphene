@@ -17,16 +17,18 @@ Graphene is **_pre-production_** software. Bugs, performance issues, and crashes
 
 ## Credits
 
-Graphene adds patches to Purpur from the following projects:
+Graphene adds patches to Purpur from...
+
+### Paper Forks
 
 - [Sugarcane](https://github.com/SugarcaneMC/Sugarcane)
 - [Yatopia](https://github.com/YatopiaMC/Yatopia)
 - [Origami](https://github.com/Minebench/Origami)
+- [Parchment](https://github.com/ProjectEdenGG/Parchment)
 - [Mirai](https://github.com/etil2jz/Mirai)
 - [Patina](https://github.com/PatinaMC/Patina)
 - [JettPack](https://gitlab.com/Titaniumtown/JettPack/-/tree/main)
 - [Akarin](https://github.com/Akarin-project/Akarin)
-- [Lithium](https://github.com/CaffeineMC/lithium-fabric)
 - [Pufferfish](https://github.com/pufferfish-gg/Pufferfish)
 - [Sakura](https://github.com/etil2jz/Sakura)
 - [Crunchy (repo taken down)](https://github.com/MrFishCakes/Crunchy)
@@ -35,9 +37,13 @@ Graphene adds patches to Purpur from the following projects:
 - [KTP](https://github.com/lynxplay/ktp)
 - [Nyper (repo taken down)](https://github.com/NyCodeGHG/Nyper)
 - [Nabulus](https://github.com/FroobWorld/Nabulus)
-- [VMP](https://github.com/RelativityMC/VMP-fabric)
 - [P4per (patches edited and squashed)](https://github.com/acrylic-style/P4per)
 - [Leaf (repo taken down, patches edited and squashed)](https://github.com/anhcraft/Leaf)
+
+### Mods
+
+- [Lithium](https://github.com/CaffeineMC/lithium-fabric)
+- [VMP](https://github.com/RelativityMC/VMP-fabric)
 
 ## Downloads
 

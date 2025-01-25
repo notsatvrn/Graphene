@@ -5,7 +5,7 @@ Subject: [PATCH] Nabulus: Separate inventory for creative
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index ad491373033b4233ff266217a9f255566ba2a8a2..6557231622df30b32d96d794c7cdf2b2cb419bc2 100644
+index 8d375e132e76e52aed68fd2e9c335c06e13a6191..a9b3e09c9d74d6b06e0b285cfb5034f38530bcd9 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -104,12 +104,7 @@ import net.minecraft.world.entity.player.Inventory;
@@ -50,7 +50,7 @@ index ad491373033b4233ff266217a9f255566ba2a8a2..6557231622df30b32d96d794c7cdf2b2
      }
      // Paper start - Chunk priority
      public BlockPos getPointInFront(double inFront) {
-@@ -1893,6 +1902,7 @@ public class ServerPlayer extends Player {
+@@ -1905,6 +1914,7 @@ public class ServerPlayer extends Player {
  
              this.onUpdateAbilities();
              this.updateEffectVisibility();
