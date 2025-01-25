@@ -40,7 +40,7 @@ index 6a00ee7f69bf44c5a9a329df26ac5640b368283b..3daf46a5087dc5743c4922b0cc125822
              org.spigotmc.SpigotConfig.disabledAdvancements = spigotConfiguration.getStringList("advancements.disabled"); // Paper - fix SPIGOT-5885, must be set early in init
              // Paper start - fix SPIGOT-5824
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 9d6b009c1374f38d5fbc37c1d1e775edd65870e8..4916df946b59e6576b53a2e312a6e9dcd5830e40 100644
+index 9d6b009c1374f38d5fbc37c1d1e775edd65870e8..8c894f46013b67dc223b8f06f49ae6a3bb60a29e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -285,7 +285,7 @@ public class Main {

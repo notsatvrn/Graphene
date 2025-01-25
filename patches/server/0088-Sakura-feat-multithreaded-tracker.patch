@@ -182,7 +182,7 @@ index 7375f53d61882ed285e43ef77cba2a08f46b0ea4..03d82ba4dfccc792aebca690ef743da6
 @@ -2058,8 +2058,26 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
          entity.tracker = null; // Paper - We're no longer tracked
      }
-
+ 
 +    // petal start - multithreaded tracker
 +    private @Nullable host.bloom.tracker.MultithreadedTracker multithreadedTracker;
 +    private final java.util.concurrent.ConcurrentLinkedQueue<Runnable> trackerMainThreadTasks = new java.util.concurrent.ConcurrentLinkedQueue<>();
@@ -208,7 +208,7 @@ index 7375f53d61882ed285e43ef77cba2a08f46b0ea4..03d82ba4dfccc792aebca690ef743da6
              for (TrackedEntity tracker : this.entityMap.values()) {
 @@ -2291,10 +2309,10 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
      public class TrackedEntity {
-
+ 
          public final ServerEntity serverEntity; // Purpur -> package -> public
 -        final Entity entity;
 +        public final Entity entity;
@@ -216,21 +216,21 @@ index 7375f53d61882ed285e43ef77cba2a08f46b0ea4..03d82ba4dfccc792aebca690ef743da6
          SectionPos lastSectionPos;
 -        public final Set<ServerPlayerConnection> seenBy = new ReferenceOpenHashSet<>(); // Paper - optimise map impl
 +        public final Set<ServerPlayerConnection> seenBy = it.unimi.dsi.fastutil.objects.ReferenceSets.synchronize(new ReferenceOpenHashSet<>()); // Paper - optimise map impl // petal - sync
-
+ 
          public TrackedEntity(Entity entity, int i, int j, boolean flag) {
              this.serverEntity = new ServerEntity(ChunkMap.this.level, entity, j, flag, this::broadcast, this.seenBy); // CraftBukkit
 @@ -2306,7 +2324,7 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
          // Paper start - use distance map to optimise tracker
          com.destroystokyo.paper.util.misc.PooledLinkedHashSets.PooledObjectLinkedOpenHashSet<ServerPlayer> lastTrackerCandidates;
-
+ 
 -        final void updatePlayers(com.destroystokyo.paper.util.misc.PooledLinkedHashSets.PooledObjectLinkedOpenHashSet<ServerPlayer> newTrackerCandidates) {
 +        public final void updatePlayers(com.destroystokyo.paper.util.misc.PooledLinkedHashSets.PooledObjectLinkedOpenHashSet<ServerPlayer> newTrackerCandidates) { // petal -> public
              com.destroystokyo.paper.util.misc.PooledLinkedHashSets.PooledObjectLinkedOpenHashSet<ServerPlayer> oldTrackerCandidates = this.lastTrackerCandidates;
              this.lastTrackerCandidates = newTrackerCandidates;
-
+ 
 @@ -2378,7 +2396,7 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
          }
-
+ 
          public void removePlayer(ServerPlayer player) {
 -            org.spigotmc.AsyncCatcher.catchOp("player tracker clear"); // Spigot
 +            //org.spigotmc.AsyncCatcher.catchOp("player tracker clear"); // Spigot // petal - we can remove async too
@@ -239,7 +239,7 @@ index 7375f53d61882ed285e43ef77cba2a08f46b0ea4..03d82ba4dfccc792aebca690ef743da6
              }
 @@ -2386,7 +2404,7 @@ Sections go from 0..16. Now whenever a section is not empty, it can potentially
          }
-
+ 
          public void updatePlayer(ServerPlayer player) {
 -            org.spigotmc.AsyncCatcher.catchOp("player tracker update"); // Spigot
 +            //org.spigotmc.AsyncCatcher.catchOp("player tracker update"); // Spigot // petal - we can update async
@@ -252,7 +252,7 @@ index fb41eb1f3076bc0c8a5dd8c6a94cf5d1413ff5bc..c258bfd3b7a8e785232c999570e0a4da
 +++ b/src/main/java/net/minecraft/server/level/ServerBossEvent.java
 @@ -13,7 +13,7 @@ import net.minecraft.util.Mth;
  import net.minecraft.world.BossEvent;
-
+ 
  public class ServerBossEvent extends BossEvent {
 -    private final Set<ServerPlayer> players = Sets.newHashSet();
 +    private final Set<ServerPlayer> players = Sets.newConcurrentHashSet(); // petal - players can be removed in async tracking
@@ -260,11 +260,11 @@ index fb41eb1f3076bc0c8a5dd8c6a94cf5d1413ff5bc..c258bfd3b7a8e785232c999570e0a4da
      public boolean visible = true;
  
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 77151fb015a261dd33d424f12af822f8bc02406a..337922a247f4c94239bcbb2ace7a30bb4e63621f 100644
+index 77151fb015a261dd33d424f12af822f8bc02406a..bda9bee28fd319407d673a392c3b8cb4d0c83495 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -277,14 +277,18 @@ public class ServerEntity {
-
+ 
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
 -        player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
@@ -274,19 +274,19 @@ index 77151fb015a261dd33d424f12af822f8bc02406a..337922a247f4c94239bcbb2ace7a30bb
 +        );
 +        // petal end
      }
-
+ 
      public void addPairing(ServerPlayer player) {
          ServerGamePacketListenerImpl playerconnection = player.connection;
-
+ 
          Objects.requireNonNull(player.connection);
 -        this.sendPairingData(playerconnection::send, player); // CraftBukkit - add player
 +        ((ServerLevel) this.entity.level).chunkSource.chunkMap.runOnTrackerMainThread(() -> this.sendPairingData(playerconnection::send, player)); // CraftBukkit - add player // petal - main thread
          this.entity.startSeenByPlayer(player);
      }
-
+ 
 @@ -388,6 +392,8 @@ public class ServerEntity {
          SynchedEntityData datawatcher = this.entity.getEntityData();
-
+ 
          if (datawatcher.isDirty()) {
 +            // Petal start - sync
 +            ((ServerLevel) this.entity.level).chunkSource.chunkMap.runOnTrackerMainThread(() -> {
@@ -300,10 +300,10 @@ index 77151fb015a261dd33d424f12af822f8bc02406a..337922a247f4c94239bcbb2ace7a30bb
 +            });
 +            // Petal end
          }
-
+ 
          if (this.entity instanceof LivingEntity) {
              Set<AttributeInstance> set = ((LivingEntity) this.entity).getAttributes().getDirtyAttributes();
-
+ 
              if (!set.isEmpty()) {
 +                // Petal start - sync
 +                final var copy = Lists.newArrayList(set);
@@ -321,5 +321,5 @@ index 77151fb015a261dd33d424f12af822f8bc02406a..337922a247f4c94239bcbb2ace7a30bb
 +                });
 +                // Petal end
              }
-
+ 
              set.clear();

@@ -31,7 +31,7 @@ index db7904b1bb402a36684b97c443336630762aeaf9..6608f0275d824a06c0876b8ea869282f
 +        return sectionCount + (GAME_EVENT_DISPATCHER_RADIUS * 2);
 +    }
 +    // petal end
-
+ 
      // Paper start - rewrite light engine
      protected volatile SWMRNibbleArray[] blockNibbles;
 @@ -205,7 +216,7 @@ public class LevelChunk implements ChunkAccess {
@@ -42,9 +42,9 @@ index db7904b1bb402a36684b97c443336630762aeaf9..6608f0275d824a06c0876b8ea869282f
 +        this.gameEventDispatcherSections = new GameEventDispatcher[getGameEventSectionLength(this.getSectionsCount())]; // petal
          Heightmap.Types[] aheightmap_type = Heightmap.Types.values();
          int j = aheightmap_type.length;
-
+ 
 @@ -519,9 +530,23 @@ public class LevelChunk implements ChunkAccess {
-
+ 
      @Override
      public GameEventDispatcher getEventDispatcher(int ySectionCoord) {
 -        return (GameEventDispatcher) this.gameEventDispatcherSections.computeIfAbsent(ySectionCoord, (j) -> {
@@ -68,10 +68,10 @@ index db7904b1bb402a36684b97c443336630762aeaf9..6608f0275d824a06c0876b8ea869282f
 +        return dispatcher;
 +        // petal end
      }
-
+ 
      @Override
 @@ -931,7 +956,7 @@ public class LevelChunk implements ChunkAccess {
-
+ 
                      gameeventdispatcher.unregister(gameeventlistener);
                      if (gameeventdispatcher.isEmpty()) {
 -                        this.gameEventDispatcherSections.remove(i);

@@ -1,3 +1,9 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: notsatvrn <satvrn@gmx.com>
+Date: Fri, 24 Jan 2025 23:39:37 -0800
+Subject: [PATCH] Lithium: math.fast_util
+
+
 diff --git a/src/main/java/net/minecraft/core/AxisCycle.java b/src/main/java/net/minecraft/core/AxisCycle.java
 index b5d8a60dc78a76c0a55bfc30cc49d26857bd914a..1550b44dac36b4136c29afea1956c041dab780a6 100644
 --- a/src/main/java/net/minecraft/core/AxisCycle.java
@@ -177,3 +183,96 @@ index b5d8a60dc78a76c0a55bfc30cc49d26857bd914a..1550b44dac36b4136c29afea1956c041
          }
  
          @Override
+diff --git a/src/main/java/net/minecraft/core/Direction.java b/src/main/java/net/minecraft/core/Direction.java
+index 2b84c0ee17a96bca10e305f5991077d18d59cddc..0e9c88bd83780b9ff9edf3b1bf5dbbcdcd5b4b2e 100644
+--- a/src/main/java/net/minecraft/core/Direction.java
++++ b/src/main/java/net/minecraft/core/Direction.java
+@@ -171,8 +171,12 @@ public enum Direction implements StringRepresentable {
+         }
+     }
+ 
++    /**
++     * @reason Avoid the modulo/abs operations
++     * @author JellySquid
++     */
+     public Direction getOpposite() {
+-        return from3DDataValue(this.oppositeIndex);
++        return VALUES[this.oppositeIndex];
+     }
+ 
+     public Direction getClockWise(Direction.Axis axis) {
+@@ -398,8 +402,12 @@ public enum Direction implements StringRepresentable {
+         return (float)((this.data2d & 3) * 90);
+     }
+ 
++    /**
++     * @reason Do not allocate an excessive number of Direction arrays
++     * @author JellySquid
++     */
+     public static Direction getRandom(Random random) {
+-        return Util.getRandom(VALUES, random);
++        return VALUES[random.nextInt(VALUES.length)];
+     }
+ 
+     public static Direction getNearest(double x, double y, double z) {
+@@ -487,6 +495,13 @@ public enum Direction implements StringRepresentable {
+             }
+         };
+ 
++        static {
++            assert Direction.Axis.X.ordinal() == 0;
++            assert Direction.Axis.Y.ordinal() == 1;
++            assert Direction.Axis.Z.ordinal() == 2;
++            assert Direction.Axis.values().length == 3;
++        }
++
+         public static final Direction.Axis[] VALUES = values();
+         public static final Codec<Direction.Axis> CODEC = StringRepresentable.fromEnum(Direction.Axis::values, Direction.Axis::byName);
+         private static final Map<String, Direction.Axis> BY_NAME = Arrays.stream(VALUES).collect(Collectors.toMap(Direction.Axis::getName, (axis) -> {
+diff --git a/src/main/java/net/minecraft/world/phys/AABB.java b/src/main/java/net/minecraft/world/phys/AABB.java
+index cfb2e46b34b2982d6724f18214557fc80cf4adfa..a61d8ee306ae12f2cdbd619949b4df311bfcd9a6 100644
+--- a/src/main/java/net/minecraft/world/phys/AABB.java
++++ b/src/main/java/net/minecraft/world/phys/AABB.java
+@@ -80,12 +80,40 @@ public class AABB {
+         return new AABB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, maxZ);
+     }
+ 
++    /**
++     * @reason Simplify the code to better help the JVM optimize it
++     * @author JellySquid
++     */
+     public double min(Direction.Axis axis) {
+-        return axis.choose(this.minX, this.minY, this.minZ);
++        //return axis.choose(this.minX, this.minY, this.minZ);
++        switch (axis.ordinal()) {
++            case 0: //X
++                return this.minX;
++            case 1: //Y
++                return this.minY;
++            case 2: //Z
++                return this.minZ;
++        }
++
++        throw new IllegalArgumentException();
+     }
+ 
++    /**
++     * @reason Simplify the code to better help the JVM optimize it
++     * @author JellySquid
++     */
+     public double max(Direction.Axis axis) {
+-        return axis.choose(this.maxX, this.maxY, this.maxZ);
++        //return axis.choose(this.maxX, this.maxY, this.maxZ);
++        switch (axis.ordinal()) {
++            case 0: //X
++                return this.maxX;
++            case 1: //Y
++                return this.maxY;
++            case 2: //Z
++                return this.maxZ;
++        }
++
++        throw new IllegalArgumentException();
+     }
+ 
+     @Override

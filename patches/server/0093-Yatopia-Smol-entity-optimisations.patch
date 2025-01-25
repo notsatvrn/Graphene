@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Pekov <ivan@mrivanplays.com>
+Date: Mon, 4 Jan 2021 20:32:06 +0200
+Subject: [PATCH] Yatopia: Smol entity optimisations
+
+Updated to 1.17 by: notsatvrn <satvrn@gmx.com>
+
+diff --git a/src/main/java/net/minecraft/world/entity/ambient/Bat.java b/src/main/java/net/minecraft/world/entity/ambient/Bat.java
+index d79e1110f5aaceab344d0ecbfe33790d9051977a..a5ee1b23add95a876b698ca7be41c58d083376a0 100644
+--- a/src/main/java/net/minecraft/world/entity/ambient/Bat.java
++++ b/src/main/java/net/minecraft/world/entity/ambient/Bat.java
+@@ -306,7 +306,6 @@ public class Bat extends AmbientCreature {
+         if (pos.getY() >= world.getSeaLevel()) {
+             return false;
+         } else {
+-            int i = world.getMaxLocalRawBrightness(pos);
+             byte b0 = 4;
+ 
+             if (Bat.isHalloweenSeason(world.getMinecraftWorld())) { // Purpur
+@@ -315,6 +314,7 @@ public class Bat extends AmbientCreature {
+                 return false;
+             }
+ 
++            int i = world.getMaxLocalRawBrightness(pos); // Yatopia - moved from above
+             return i > random.nextInt(b0) ? false : checkMobSpawnRules(type, world, spawnReason, pos, random);
+         }
+     }

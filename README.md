@@ -20,6 +20,7 @@ Graphene is **_pre-production_** software. Bugs, performance issues, and crashes
 Graphene adds patches to Purpur from the following projects:
 
 - [Sugarcane](https://github.com/SugarcaneMC/Sugarcane)
+- [Yatopia](https://github.com/YatopiaMC/Yatopia)
 - [Origami](https://github.com/Minebench/Origami)
 - [Mirai](https://github.com/etil2jz/Mirai)
 - [Patina](https://github.com/PatinaMC/Patina)

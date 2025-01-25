@@ -15,13 +15,13 @@ index 2e36a90b569916be36e8b4de158d090a1780db1e..74f92c3fa2e3b2e99d8ae560346e943e
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -992,20 +992,22 @@ public abstract class LivingEntity extends Entity {
          }
-
+ 
          if (entity != null) {
 -            ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
 +            // petal start - only do itemstack lookup if we need to
 +            //ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
              EntityType<?> entitytypes = entity.getType();
-
+ 
              // Purpur start
 -            if (entitytypes == EntityType.SKELETON && itemstack.is(Items.SKELETON_SKULL)) {
 +            if (entitytypes == EntityType.SKELETON && this.getItemBySlot(EquipmentSlot.HEAD).is(Items.SKELETON_SKULL)) {
@@ -37,7 +37,7 @@ index 2e36a90b569916be36e8b4de158d090a1780db1e..74f92c3fa2e3b2e99d8ae560346e943e
              }
              // Purpur end
 +            // petal end
-
+ 
              // Purpur start
              if (entity instanceof LivingEntity entityliving) {
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java

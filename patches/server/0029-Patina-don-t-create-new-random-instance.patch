@@ -5,10 +5,10 @@ Subject: [PATCH] Patina: don't create new random instance
 
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index e5574d581ff07a09c0f18b7b2e72587d2a20bec0..2a3d3524de342495ded4b4607f99e8986c459c00 100644
+index e966105356ab892fb55a90a0b23e54bc66de16f6..82f12d642e9d832834af985778423a6221a07c56 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -660,7 +660,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -660,7 +660,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<Runnab
  
              if (worlddimension == null) {
                  dimensionmanager = (DimensionType) this.registryHolder.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrThrow(DimensionType.OVERWORLD_LOCATION);

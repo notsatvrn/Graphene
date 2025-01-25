@@ -455,7 +455,7 @@ index 0b206a3f964f5143e0720890d78d682b8b558c15..84d452b52439cd938bd3d4b1721914db
 -        }
 +        });
 +        // petal end
-
+ 
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/MoveToTargetSink.java b/src/main/java/net/minecraft/world/entity/ai/behavior/MoveToTargetSink.java
@@ -657,7 +657,7 @@ index fa0542ee4517715b385e533f6347b44009e151be..a8746f5ded4deb14c02f76625583b381
 -        }
 +        });
 +        // petal end
-
+ 
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/ai/navigation/FlyingPathNavigation.java b/src/main/java/net/minecraft/world/entity/ai/navigation/FlyingPathNavigation.java
@@ -666,7 +666,7 @@ index 6cdb0f0f881ea57c95821914262208c4b636587e..4afe7aee61d155bf132d2535c38b8ae0
 +++ b/src/main/java/net/minecraft/world/entity/ai/navigation/FlyingPathNavigation.java
 @@ -12,6 +12,15 @@ import net.minecraft.world.level.pathfinder.PathFinder;
  import net.minecraft.world.phys.Vec3;
-
+ 
  public class FlyingPathNavigation extends PathNavigation {
 +
 +    // petal start
@@ -687,12 +687,12 @@ index 6cdb0f0f881ea57c95821914262208c4b636587e..4afe7aee61d155bf132d2535c38b8ae0
 -        return new PathFinder(this.nodeEvaluator, range);
 +        return new PathFinder(this.nodeEvaluator, range, nodeEvaluatorGenerator); // petal
      }
-
+ 
      @Override
 @@ -45,6 +54,8 @@ public class FlyingPathNavigation extends PathNavigation {
              this.recomputePath();
          }
-
+ 
 +        if (this.path != null && !this.path.isProcessed()) return; // petal
 +
          if (!this.isDone()) {
@@ -704,7 +704,7 @@ index f351b1eb923cc72bc5bb7f891d27246af14f4e1d..17b199eb53bc4e9a0bb78ae1a6758089
 +++ b/src/main/java/net/minecraft/world/entity/ai/navigation/GroundPathNavigation.java
 @@ -16,6 +16,15 @@ import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
  import net.minecraft.world.phys.Vec3;
-
+ 
  public class GroundPathNavigation extends PathNavigation {
 +
 +    // petal start
@@ -716,7 +716,7 @@ index f351b1eb923cc72bc5bb7f891d27246af14f4e1d..17b199eb53bc4e9a0bb78ae1a6758089
 +    // petal end
 +
      private boolean avoidSun;
-
+ 
      public GroundPathNavigation(Mob mob, Level world) {
 @@ -26,7 +35,7 @@ public class GroundPathNavigation extends PathNavigation {
      protected PathFinder createPathFinder(int range) {
@@ -725,7 +725,7 @@ index f351b1eb923cc72bc5bb7f891d27246af14f4e1d..17b199eb53bc4e9a0bb78ae1a6758089
 -        return new PathFinder(this.nodeEvaluator, range);
 +        return new PathFinder(this.nodeEvaluator, range, nodeEvaluatorGenerator); // petal
      }
-
+ 
      @Override
 diff --git a/src/main/java/net/minecraft/world/entity/ai/navigation/PathNavigation.java b/src/main/java/net/minecraft/world/entity/ai/navigation/PathNavigation.java
 index 10505f32b71b723ed8dbfd9e1348a1691c9f7f18..df65ef6779db8642a03de909bd11f6a4e8c21b99 100644
@@ -739,7 +739,7 @@ index 10505f32b71b723ed8dbfd9e1348a1691c9f7f18..df65ef6779db8642a03de909bd11f6a4
 +                (this.path != null && this.path.isProcessed() && !this.path.isDone() && this.path.getNodeCount() != 0);
      }
      // Paper end
-
+ 
 @@ -158,6 +158,9 @@ public abstract class PathNavigation {
              return null;
          } else if (!this.canUpdatePath()) {
@@ -773,7 +773,7 @@ index 10505f32b71b723ed8dbfd9e1348a1691c9f7f18..df65ef6779db8642a03de909bd11f6a4
 +                }
 +            });
 +            // petal end
-
+ 
              return path;
          }
 @@ -235,8 +247,8 @@ public abstract class PathNavigation {
@@ -790,7 +790,7 @@ index 10505f32b71b723ed8dbfd9e1348a1691c9f7f18..df65ef6779db8642a03de909bd11f6a4
 @@ -260,6 +272,8 @@ public abstract class PathNavigation {
              this.recomputePath();
          }
-
+ 
 +        if (this.path != null && !this.path.isProcessed()) return; // petal - skip pathfinding if we're still processing
 +
          if (!this.isDone()) {
@@ -798,7 +798,7 @@ index 10505f32b71b723ed8dbfd9e1348a1691c9f7f18..df65ef6779db8642a03de909bd11f6a4
                  this.followThePath();
 @@ -281,6 +295,7 @@ public abstract class PathNavigation {
      }
-
+ 
      protected void followThePath() {
 +        if (!this.path.isProcessed()) return; // petal
          Vec3 vec3 = this.getTempMobPos();
@@ -838,7 +838,7 @@ index 488d1e24b3e8f0fd8dc973d450215e4216720db3..dd77c5edc7a9163d8b3508499def3575
 -                    return entry.getLongValue() < this.lastUpdate;
 -                });
 -            }
-
+ 
 +            });
 +            // petal end
          }
@@ -855,12 +855,12 @@ index d1d27e0a3e52057e5f80d917508f548ac6195b1e..69f9f5ff20f3c2b940f8a34ef3ef4bbb
 -                    } else {
 +                    } else if (navigation.getPath() != null && navigation.getPath().isProcessed()) { // petal - check processing
                          boolean flag = this.pathfindDirectlyTowards(Bee.this.hivePos);
-
+ 
                          if (!flag) {
 @@ -1185,7 +1185,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
              } else {
                  Path pathentity = Bee.this.navigation.getPath();
-
+ 
 -                return pathentity != null && pathentity.getTarget().equals(pos) && pathentity.canReach() && pathentity.isDone();
 +                return pathentity != null && pathentity.isProcessed() && pathentity.getTarget().equals(pos) && pathentity.canReach() && pathentity.isDone(); // petal - ensure path is processed
              }
@@ -871,7 +871,7 @@ index c69cf2d2778d73f6834208d20e5e0b1502a905c8..226a870b2277ce7a159cd90cff2ab00d
 --- a/src/main/java/net/minecraft/world/entity/monster/Drowned.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Drowned.java
 @@ -289,7 +289,7 @@ public class Drowned extends Zombie implements RangedAttackMob {
-
+ 
      protected boolean closeToNextPos() {
          Path path = this.getNavigation().getPath();
 -        if (path != null) {
@@ -880,10 +880,10 @@ index c69cf2d2778d73f6834208d20e5e0b1502a905c8..226a870b2277ce7a159cd90cff2ab00d
              if (blockPos != null) {
                  double d = this.distanceToSqr((double)blockPos.getX(), (double)blockPos.getY(), (double)blockPos.getZ());
 diff --git a/src/main/java/net/minecraft/world/level/pathfinder/Path.java b/src/main/java/net/minecraft/world/level/pathfinder/Path.java
-index 2a335f277bd0e4b8ad0f60d8226eb8aaa80a871f..527f5fb55b596b44c7418a6f70e7243432c160dd 100644
+index f4b6c2bf74884c0b53956788dcfcca784cfafca2..e16d78ee7b41484b037dc689a39bbc85781e6860 100644
 --- a/src/main/java/net/minecraft/world/level/pathfinder/Path.java
 +++ b/src/main/java/net/minecraft/world/level/pathfinder/Path.java
-@@ -30,6 +30,17 @@ public class Path {
+@@ -29,6 +29,17 @@ public class Path {
          this.reached = reachesTarget;
      }
  
@@ -901,7 +901,7 @@ index 2a335f277bd0e4b8ad0f60d8226eb8aaa80a871f..527f5fb55b596b44c7418a6f70e72434
      public void advance() {
          ++this.nextNodeIndex;
      }
-@@ -104,6 +115,8 @@ public class Path {
+@@ -103,6 +114,8 @@ public class Path {
      }
  
      public boolean sameAs(@Nullable Path o) {

@@ -126,10 +126,10 @@ index 88bac72edf19c578902f49d20353989ed4d96f8f..aee22cfa31a024c310d39f78c361234a
  
      public long[] getLongArray(int index) {
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index deed7aaa9401e33285e04f646d2592f345f98689..ae04904f2168852c635d9e94161e91c6c41e9756 100644
+index eca26293aa9001d76f83915670b8b89fab061745..961f34821df7d288018d7fea6a9b933092eb0d2d 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1020,23 +1020,27 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1020,23 +1020,27 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<Runnab
      }
  
      // CraftBukkit start
@@ -162,9 +162,9 @@ index deed7aaa9401e33285e04f646d2592f345f98689..ae04904f2168852c635d9e94161e91c6
          if (!hasLoggedStop && isDebugging()) io.papermc.paper.util.TraceUtil.dumpTraceForThread("Server stopped"); // Paper
          // Paper start - kill main thread, and kill it hard
          shutdownThread = Thread.currentThread();
-@@ -1412,7 +1416,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1412,7 +1416,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<Runnab
      @Override
-     public TickTask wrapRunnable(Runnable runnable) {
+     public Runnable wrapRunnable(Runnable runnable) { // Patina
          // Paper start - anything that does try to post to main during watchdog crash, run on watchdog
 -        if (this.hasStopped && Thread.currentThread().equals(shutdownThread)) {
 +        if (this.hasStopped.get() && Thread.currentThread().equals(shutdownThread)) {
