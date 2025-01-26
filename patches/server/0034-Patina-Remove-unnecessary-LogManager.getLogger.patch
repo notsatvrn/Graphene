@@ -5,7 +5,7 @@ Subject: [PATCH] Patina: Remove unnecessary `LogManager.getLogger()`
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 7dc5e8d565c3a4c64b90b37413a7c71d8ce71ccf..297ecb57f253296be201001ed23113418a7c4dd1 100644
+index 4fcb9c3fc56091caff8d5510e44f570393f42a7d..2ffef070ec016fcfd2b7784f78a64f532772cabc 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -164,7 +164,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
@@ -17,7 +17,7 @@ index 7dc5e8d565c3a4c64b90b37413a7c71d8ce71ccf..297ecb57f253296be201001ed2311341
              } else {
                  super.setSeed(seed);
                  locked = true;
-@@ -2332,7 +2332,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -2335,7 +2335,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
                  try {
                      spawnReason = org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.valueOf(spawnReasonName);
                  } catch (Exception ignored) {

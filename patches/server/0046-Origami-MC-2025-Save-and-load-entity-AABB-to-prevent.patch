@@ -28,10 +28,10 @@ you can find the original code on https://github.com/Minebench/Origami/
 Updated to 1.17 by: notsatvrn <satvrn@gmx.com>
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 3fd3eb4d20c6e4c65b4c0924fad529da2311204f..bbdd9a004c7b233ce9517a78808034047dcaec3e 100644
+index 967c86047e436e729cb8f4099e1e22c98c712e3f..d9bc474e7caafa998f8bf6769db1017ef1c63d11 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -2184,6 +2184,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -2187,6 +2187,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
              if (fromNetherPortal) {
                  nbt.putBoolean("Paper.FromNetherPortal", true);
              }
@@ -44,7 +44,7 @@ index 3fd3eb4d20c6e4c65b4c0924fad529da2311204f..bbdd9a004c7b233ce9517a7880803404
              // Paper end
              // Origami start
              if (fromMobFarm) {
-@@ -2271,6 +2277,16 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -2274,6 +2280,16 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
              } else {
                  throw new IllegalStateException("Entity has invalid position");
              }

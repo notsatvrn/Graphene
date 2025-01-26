@@ -1,0 +1,51 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Blast-MC <cjblanton2@gmail.com>
+Date: Mon, 25 Jul 2022 09:11:13 -0400
+Subject: [PATCH] Parchment: Add spam bypass permission
+
+Original code by lexikiq, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/ProjectEdenGG/Parchment
+
+Backported to 1.17 by: notsatvrn <satvrn@gmx.com>
+
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index b3e3d5e4165d50b758446a6f225017facb065d0a..af06260dd7a042fe495adae6b668b5c71ae9c022 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -822,6 +822,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+     public void handleCustomCommandSuggestions(ServerboundCommandSuggestionPacket packet) {
+         // PlayerConnectionUtils.ensureMainThread(packetplayintabcomplete, this, this.player.getWorldServer()); // Paper - run this async
+         // CraftBukkit start
++        if (!this.getCraftPlayer().hasPermission("spam.bypass")) { // Parchment - spam bypass
+         if (this.chatSpamTickCount.addAndGet(com.destroystokyo.paper.PaperConfig.tabSpamIncrement) > com.destroystokyo.paper.PaperConfig.tabSpamLimit && !this.server.getPlayerList().isOp(this.player.getGameProfile())) { // Paper start - split and make configurable
+             server.scheduleOnMain(() -> this.disconnect(new TranslatableComponent("disconnect.spam", new Object[0]), org.bukkit.event.player.PlayerKickEvent.Cause.SPAM)); // Paper - kick event cause
+             return;
+@@ -832,6 +833,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+             server.scheduleOnMain(() -> this.disconnect(new TranslatableComponent("disconnect.spam", new Object[0]), org.bukkit.event.player.PlayerKickEvent.Cause.SPAM)); // Paper - kick event cause
+             return;
+         }
++        } // Parchment - spam bypass
+         // Paper end
+         // CraftBukkit end
+         // Paper start - Don't suggest if tab-complete is disabled
+@@ -2183,6 +2185,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+             }
+ 
+             // Spigot start - spam exclusions
++            if (this.getCraftPlayer().hasPermission("spam.bypass")) return; // Parchment - spam bypass
+             boolean counted = true;
+             for ( String exclude : org.spigotmc.SpigotConfig.spamExclusions )
+             {
+@@ -2980,10 +2983,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+     public void handlePlaceRecipe(ServerboundPlaceRecipePacket packet) {
+         // Paper start
+         if (!org.bukkit.Bukkit.isPrimaryThread()) {
++            if (!this.getCraftPlayer().hasPermission("spam.bypass")) { // Parchment - spam bypass
+             if (recipeSpamPackets.addAndGet(com.destroystokyo.paper.PaperConfig.autoRecipeIncrement) > com.destroystokyo.paper.PaperConfig.autoRecipeLimit) {
+                 server.scheduleOnMain(() -> this.disconnect(new TranslatableComponent("disconnect.spam", new Object[0]), org.bukkit.event.player.PlayerKickEvent.Cause.SPAM)); // Paper - kick event cause
+                 return;
+             }
++            } // Parchment - spam bypass
+         }
+         // Paper end
+         PacketUtils.ensureRunningOnSameThread(packet, this, this.player.getLevel());

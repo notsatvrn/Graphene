@@ -5,6 +5,11 @@ Subject: [PATCH] Parchment: Fix missing CraftMetaSkull serializedProfile
 
 Plugins (ab)using NMS may change the "profile" field using reflections instead of the "setProfile" method, especially if they are targeted towards old Minecraft versions. This fixes the potential discrepancies and NPEs.
 
+Original code by lexikiq, licensed under GNU Lesser General Public License v3.0
+you can find the original code on https://github.com/ProjectEdenGG/Parchment
+
+Backported to 1.17 by: notsatvrn <satvrn@gmx.com>
+
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
 index 7cacc61fed0c610845c67894d1cc68e44f5e46fe..18feaf0152b67b18989ca03fbb74194db489081e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java

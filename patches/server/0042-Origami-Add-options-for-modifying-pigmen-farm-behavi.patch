@@ -35,7 +35,7 @@ index 7d8a66e962a6c607482148258a5e4e4bd5560228..f97f42ac0197be21b10d6e6288b31dc8
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 297ecb57f253296be201001ed23113418a7c4dd1..3fd3eb4d20c6e4c65b4c0924fad529da2311204f 100644
+index 2ffef070ec016fcfd2b7784f78a64f532772cabc..967c86047e436e729cb8f4099e1e22c98c712e3f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -335,6 +335,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
@@ -46,7 +46,7 @@ index 297ecb57f253296be201001ed23113418a7c4dd1..3fd3eb4d20c6e4c65b4c0924fad529da
      protected int numCollisions = 0; // Paper
      public void inactiveTick() { }
      // Spigot end
-@@ -2184,6 +2185,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -2187,6 +2188,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
                  nbt.putBoolean("Paper.FromNetherPortal", true);
              }
              // Paper end
@@ -58,7 +58,7 @@ index 297ecb57f253296be201001ed23113418a7c4dd1..3fd3eb4d20c6e4c65b4c0924fad529da
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2348,6 +2354,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -2351,6 +2357,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
                  spawnReason = org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.DEFAULT;
              }
              // Paper end

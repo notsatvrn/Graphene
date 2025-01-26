@@ -11,7 +11,7 @@ you to easily disable books, should you want to preemptively remove this
 functionality before additional exploits are found.
 
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-index 8a93feacc0ca2ccc8568f6a8a1ad75f521d4ce33..62a68052e6e1e81ccce0234484da4294ff88838b 100644
+index 8a93feacc0ca2ccc8568f6a8a1ad75f521d4ce33..9617b9462fc0f64d37208642229374cbf365a6f8 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 @@ -193,4 +193,13 @@ public class GrapheneConfig {
@@ -20,7 +20,7 @@ index 8a93feacc0ca2ccc8568f6a8a1ad75f521d4ce33..62a68052e6e1e81ccce0234484da4294
  
 +    public static boolean enableBooks;
 +    private static void books() {
-+        enableBooks = getBoolean("enable-books", true,
++        enableBooks = getBoolean("settings.enable-books", true,
 +            "Whether or not books should be writeable.",
 +            "Servers that anticipate being a target for duping may want to consider",
 +            "disabling this option.",

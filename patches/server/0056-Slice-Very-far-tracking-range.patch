@@ -27,7 +27,7 @@ index 7740a4d7652d23460017ca2abfc3dcd838ce9e99..56271f23fc8fbaa4eccc80fa61e49011
              if (i != 0) {
                  int j = entitytypes.updateInterval();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index bbdd9a004c7b233ce9517a78808034047dcaec3e..24e7aaf3e17e8716c77a55789de8d53482835caa 100644
+index d9bc474e7caafa998f8bf6769db1017ef1c63d11..adc11b011fe5e1502a4f56662e619ee44ecca344 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -345,6 +345,8 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n

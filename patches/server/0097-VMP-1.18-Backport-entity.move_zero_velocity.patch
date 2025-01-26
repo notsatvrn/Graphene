@@ -1,12 +1,12 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Simon Gardling <titaniumtown@gmail.com>
 Date: Sun, 12 Dec 2021 17:19:00 -0500
-Subject: [PATCH] VMP: skip entity move if movement is zero
+Subject: [PATCH] VMP: (1.18 Backport) entity.move_zero_velocity
 
 Code originally licensed under the MIT license and created for the VMP project: https://github.com/RelativityMC/VMP-fabric
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index a4f6040e4284be11a88a77b92e4a84d2bd0701af..586a6a88d6728d345b062a7f2651210ee1b2a038 100644
+index 3e6956b0734e0d6533696384e0e58aaed1fb4b7b..48c7a2a6905b04f4468d04ed1f3ce1ab72d17dda 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -948,6 +948,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n

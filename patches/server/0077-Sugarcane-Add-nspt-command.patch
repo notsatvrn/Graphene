@@ -6,7 +6,7 @@ Subject: [PATCH] Sugarcane: Add nspt command
 Original code by Yatopia, licensed under MIT License
 
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-index 87365ac92c631e926607f57ae9379cca2d951ccc..26ebbdb97b4dd8b92ee66c56970663541e2dd305 100644
+index e004b4b80bf6f3ebfd73378b37919ee951f36abc..7fd46dfc64017d8d65b94952b186b7f9aeb3dac8 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 @@ -12,6 +12,7 @@ import org.simpleyaml.configuration.file.YamlFile;
@@ -21,7 +21,7 @@ index 87365ac92c631e926607f57ae9379cca2d951ccc..26ebbdb97b4dd8b92ee66c5697066354
  
          commands = new HashMap<>();
          commands.put("graphene", new GrapheneCommand("graphene"));
-+        commands.put("npst", new NSPTCommand("nspt"));
++        commands.put("nspt", new NSPTCommand("nspt"));
  
          readConfig(GrapheneConfig.class, null);
      }

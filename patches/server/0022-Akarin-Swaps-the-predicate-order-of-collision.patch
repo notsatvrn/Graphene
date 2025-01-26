@@ -1,28 +1,24 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: foss-mc <69294560+foss-mc@users.noreply.github.com>
-Date: Mon, 28 Jun 2021 11:31:31 +0000
+From: =?UTF-8?q?=E3=84=97=E3=84=A0=CB=8B=20=E3=84=91=E3=84=A7=CB=8A?=
+ <tsao-chi@the-lingo.org>
+Date: Fri, 10 Apr 2020 15:47:15 +0800
 Subject: [PATCH] Akarin: Swaps the predicate order of collision
 
+Original code by Akarin-project, licensed under GNU General Public License version 3
+you can find the original code on https://github.com/Akarin-project/Akarin/
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 46a9e5d33f94c699761ebbfc8721321347e735f0..7dc5e8d565c3a4c64b90b37413a7c71d8ce71ccf 100644
+index 46a9e5d33f94c699761ebbfc8721321347e735f0..4fcb9c3fc56091caff8d5510e44f570393f42a7d 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1860,8 +1860,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -1860,8 +1860,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
      public void playerTouch(Player player) {}
  
      public void push(Entity entity) {
--        if (!this.isPassengerOfSameVehicle(entity)) {
++        if (entity.noPhysics || this.noPhysics) return; // Akarin - Test this earlier
+         if (!this.isPassengerOfSameVehicle(entity)) {
 -            if (!entity.noPhysics && !this.noPhysics) {
-+        if (!entity.noPhysics && !this.noPhysics && !this.isPassengerOfSameVehicle(entity)) { // Patina - (Akarin) Swaps the predicate order of collision
++            if (true || !entity.noPhysics && !this.noPhysics) { // Akarin - Moved up
                  if (this.level.paperConfig.onlyPlayersCollide && !(entity instanceof ServerPlayer || this instanceof ServerPlayer)) return; // Paper
                  double d0 = entity.getX() - this.getX();
                  double d1 = entity.getZ() - this.getZ();
-@@ -1890,7 +1889,6 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
-                     }
-                 }
- 
--            }
-         }
-     }
- 

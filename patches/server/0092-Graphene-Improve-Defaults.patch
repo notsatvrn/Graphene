@@ -210,15 +210,15 @@ index 44f3d6a5e2729507fcc7246149183c304fb3ad97..a288dab89d4e1687cbe754f1f65eeaf4
          setComment("projectile", "Optimizes projectile settings");
      }
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-index a5a1003a6dd1ec69148d292d9f28199c90e35927..6f77562e81e741e4658219f002dcc881fc818e18 100644
+index 94e1748c798de92f2ba0e6963d6674c026115182..9d115cc4ad54608beded177bff434965b94bba8e 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 @@ -213,7 +213,7 @@ public class GrapheneConfig {
      public static boolean enableAsyncMobSpawning;
      public static boolean asyncMobSpawningInitialized;
      private static void asyncMobSpawning() {
--        boolean temp = getBoolean("enable-async-mob-spawning", false,
-+    boolean temp = getBoolean("enable-async-mob-spawning", true,
+-        boolean temp = getBoolean("settings.enable-async-mob-spawning", false,
++        boolean temp = getBoolean("settings.enable-async-mob-spawning", true,
              "Whether or not asynchronous mob spawning should be enabled.",
              "This feature is experimental and should be tested prior to being run in production.",
              "There are currently no known issues, however certain plugins may have issues when",

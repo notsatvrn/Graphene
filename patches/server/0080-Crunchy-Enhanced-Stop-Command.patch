@@ -143,7 +143,7 @@ index 0000000000000000000000000000000000000000..7241d56b3576685e71ba8d65fcee5cb3
 +
 +}
 diff --git a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
-index 26ebbdb97b4dd8b92ee66c56970663541e2dd305..2c2cf1f1bce6bf5058bd89dba02f3d5c44d225fc 100644
+index 7fd46dfc64017d8d65b94952b186b7f9aeb3dac8..84b625e6732428ea7458594b81eaba96745cfe75 100644
 --- a/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 +++ b/src/main/java/io/graphenemc/graphene/GrapheneConfig.java
 @@ -13,6 +13,7 @@ import org.simpleyaml.exceptions.InvalidConfigurationException;
@@ -155,7 +155,7 @@ index 26ebbdb97b4dd8b92ee66c56970663541e2dd305..2c2cf1f1bce6bf5058bd89dba02f3d5c
  import java.io.File;
  import java.io.IOException;
 @@ -77,6 +78,11 @@ public class GrapheneConfig {
-         commands.put("npst", new NSPTCommand("nspt"));
+         commands.put("nspt", new NSPTCommand("nspt"));
  
          readConfig(GrapheneConfig.class, null);
 +
