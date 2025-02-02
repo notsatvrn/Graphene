@@ -356,15 +356,6 @@ index fe51e2836dfb5bf0d4cdaef93cedc1eb4f3eb3e1..8aab9fc148455c03b8a8c99cbfc45a1d
      public int wakeUpInactiveAnimals = 4;
      public int wakeUpInactiveAnimalsEvery = 60*20;
      public int wakeUpInactiveAnimalsFor = 5*20;
-@@ -200,7 +200,7 @@ public class SpigotWorldConfig
-     public int villagersWorkImmunityFor = 20;
-     public boolean villagersActiveForPanic = true;
-     // Paper end
--    public boolean tickInactiveVillagers = true;
-+    public boolean tickInactiveVillagers = false;
-     private void activationRange()
-     {
-         boolean hasAnimalsConfig = config.getInt("entity-activation-range.animals", this.animalActivationRange) != this.animalActivationRange; // Paper
 @@ -272,7 +272,7 @@ public class SpigotWorldConfig
      public int tridentDespawnRate;
      private void arrowDespawnRate()
